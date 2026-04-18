@@ -299,7 +299,7 @@ def bootstrap_partial_r(x, y, z, n_boot=1000, seed=0):
     for i in range(n_boot):
         idx = rng.integers(0, n, size=n)
         vals[i] = partial_r(x[idx], y[idx], z[idx])[0]
-    return float(np.percentile(vals, 2.5)), float(np.percentile(vals, 97.5))
+    return float(np.nanpercentile(vals, 2.5)), float(np.nanpercentile(vals, 97.5))
 
 
 

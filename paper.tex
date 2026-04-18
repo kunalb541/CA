@@ -277,9 +277,9 @@ coarse-scale net change over and above the density channel.
 The result therefore does not reduce to a density confound.
 
 Figure~\ref{fig:studyA_traces} shows illustrative cumulative net-change traces
-for two representative worlds: one with positive gap in which the fine
+for the two extreme-gap worlds: the world with the largest positive gap (fine
 observer records large net destruction while the coarse observer remains near
-zero, and one with negative gap showing the opposite pattern.
+zero) and the world with the largest negative gap (opposite pattern).
 These traces are descriptive and carry no inferential weight; the
 quantitative result rests on the ensemble statistics above.
 
@@ -287,8 +287,10 @@ quantitative result rests on the ensemble statistics above.
 \centering
 \includegraphics[width=\linewidth]{fig2_studyA_traces.pdf}
 \caption{
-Illustrative observer trajectories for a representative positive-gap world
-(left, $G=0.621$) and a representative negative-gap world (right, $G=-0.321$).
+Illustrative observer trajectories for the maximum-gap world
+(left, $G=0.621$) and the minimum-gap world (right, $G=-0.321$).
+These are the extreme-gap worlds selected by $\arg\max$ and $\arg\min$ of $G$,
+not randomly chosen representatives.
 Fine and coarse observers can accumulate opposite net-change narratives over
 the same deterministic run. Yellow shading marks the early window $[0,50]$
 used to compute $\Dearly$.
@@ -424,6 +426,12 @@ Negative control: primary-target static/early with $R^2>0.04$ & \multicolumn{2}{
 \bottomrule
 \end{tabular}
 \end{table}
+\noindent\textit{Note on negative controls.}
+At $\rho\in[0.20,0.35]$ on a $128^2$ grid, $B=16$ blocks cover 256 cells
+each; virtually all blocks are occupied, so $B=16$ static features are
+near-constant across worlds and their $R^2\approx0$ trivially.
+The 4 conditions involving $B=16$ static features are therefore degenerate.
+Excluding them, 0/16 non-trivial negative controls exceed the threshold.
 
 \subsection{Interpretation}
 
@@ -631,16 +639,27 @@ This interval lies entirely below zero and fails to exceed $0.50$.
 The supported reading is therefore that embedded isolated cells are
 harbingers of later disagreement, not established global mediators of it.
 
+A design note: the outcome $G$ is computed over the full $[0,250]$ window
+while the mediator $\fnet$ uses the post-predictor window $[50,250]$.
+The mismatch means $G$ absorbs dynamics from steps $0$--$50$ that precede the
+predictor measurement, which can only attenuate the mediation estimate.
+A fully aligned test would use $G_{[50,250]}$ as the outcome; we do not
+re-run it here because the mediation fraction already fails by a wide margin
+($-0.072$ with CI entirely below zero).
+
 \subsection{Null decomposition of the component-change law}
 
 We decompose $\bemp = \bdeath + \blocal + \bres$ and ask whether $\bres$
 represents a positive excess beyond trivial null dynamics.
 The death term $\bdeath=-1.0$ is analytically fixed: each embedded cell that
 dies removes exactly one component.
+In practice, roughly 35--41\% of embedded cells die across the six conditions
+(empirical survival probability 0.59--0.66); the decomposition is a formal
+accounting identity, not a prediction based on the actual death rate.
 A static local null (no neighbourhood context) gives $\blocal\approx0$,
 leaving $\bres\approx\bemp-\bdeath$; the excess index
 $\chi=\bres/|\bdeath+\blocal|$ is negative in all six conditions
-($\chi\in[-0.38,-0.77]$), so even under the static null the residual is not
+($\chi\in[-0.77,-0.38]$), so even under the static null the residual is not
 positive.
 
 A dynamic local null, using $5\times5$ neighbourhood patches centred on
@@ -649,7 +668,7 @@ Here $\blocal$ is an accounting term defined from mean single-step local
 structural contributions, not a regression coefficient from a separate
 null-model fit.
 Local neighbourhood context is itself predictive and non-negligible.
-Under this null, $\bres\in[-0.81,-1.12]$ and $\chi_{\rm mean}=-1.78$; no
+Under this null, $\bres\in[-1.12,-0.81]$ and $\chi_{\rm mean}=-1.78$; no
 condition satisfies $\chi\geq0.25$.
 The residual remains large and negative: not a small positive excess over
 local dynamics, but a large negative residual after subtracting the death
@@ -737,8 +756,6 @@ NumPy, SciPy, scikit-learn, pandas, Matplotlib, and seaborn.
 
 All code, simulation outputs, and figure sources are available at
 \url{https://github.com/kunalb541/CA}.
-
-\bibliographystyle{apsrev4-2}
 
 \begin{thebibliography}{99}
 

@@ -77,7 +77,7 @@ The test suite covers:
 - Periodic (torus) BFS component counting vs non-periodic counting.
 - Embedded and alone cell classification edge cases.
 - Narrative gap computation for known inputs.
-- That all negative controls produce R² < 0.04 (regression against stored data).
+- That all negative controls produce R² < 0.04 (regression against stored data). Note: 4 of the 20 conditions use B=16 static features, which are near-constant at the study densities (all blocks occupied); those conditions pass trivially. Removing them, 0/16 non-trivial conditions exceed the threshold.
 
 ---
 
