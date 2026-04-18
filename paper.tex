@@ -720,6 +720,21 @@ dynamic local null: $\chi < 0$ in all six conditions.
 The empirical structure is well-characterised; the mechanistic account is not
 yet in hand.
 
+\paragraph{On the null decomposition baseline.}
+The choice $\bdeath=-1.0$ is analytically exact rather than empirically
+estimated: an embedded cell is a 4-connected singleton component, so its
+death must reduce the component count by exactly one.
+An alternative would scale $\bdeath$ by the actual death fraction
+($\approx0.37$), giving $\bdeath\approx-0.37$ and shifting $\bres$ toward
+zero.
+We retain $-1.0$ because it is the maximum individual-cell contribution,
+making $\bres$ a conservative lower bound on any excess coupling: a negative
+$\bres$ even under this upper-bound baseline rules out the positive-coupling
+story more forcefully than a scaled baseline would.
+The large negative $\bres$ ($\chi_{\rm mean}=-1.78$) therefore cannot be
+explained away by the choice of baseline; any reasonable rescaling leaves the
+qualitative conclusion intact.
+
 \paragraph{Observer definition and numerical scope.}
 All analyses in this paper use a single fine measurement scheme:
 4-connected component count on the torus.
@@ -742,9 +757,30 @@ The global mediation path through $\fnet$ is insufficient; a more structured
 or non-global path may fare better.
 The dynamic local null leaves a large negative $\bres$, which indicates the
 slope law is driven by something beyond isolated-cell deaths and immediate
-neighbourhood context---but what that is remains uncharacterised.
-Whether any of these results generalise beyond GoL, beyond the density ranges
-tested, or to other Life-like rules is a question this paper does not answer.
+neighbourhood context.
+One candidate account is a \textit{cascade effect}: an embedded cell may
+temporarily stabilise adjacent configurations, so its death triggers
+secondary structural failures that propagate across multiple components
+beyond the local $5\times5$ patch.
+Under this account, the effective causal reach of an embedded cell's death
+extends further than the local null can capture, which would produce the
+observed negative excess.
+A direct test would track downstream component changes triggered by each
+embedded cell's removal across a larger causal window; such a localized causal
+audit is a natural next step.
+
+Generalisation beyond GoL is an open empirical question.
+Among Life-like rules, HighLife (B36/S23) is a natural first candidate:
+it supports a richer replicator ecology, which would test whether the
+embedded-cell predictor remains valid when more complex persistent structures
+dominate the post-transient regime.
+Day~\&~Night (B3678/S34678), which has a symmetric birth/death rule, would
+separate the effects of rule asymmetry from the structural mechanism.
+Rules near the computational phase transition---at Langton's $\lambda\approx0.273$---
+would test whether the observer disagreement and the slope law are specific to
+GoL's particular order/chaos boundary or persist across the rule-space continuum.
+The functional dependence $\beta(\rho,K,\text{rule set})$ is fully uncharacterised
+and is the most direct route to understanding the scope of the empirical law.
 
 \begin{acknowledgments}
 No external funding was received for this work. The author has no conflicts
