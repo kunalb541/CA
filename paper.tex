@@ -720,6 +720,20 @@ dynamic local null: $\chi < 0$ in all six conditions.
 The empirical structure is well-characterised; the mechanistic account is not
 yet in hand.
 
+Follow-up audits have probed the mechanism directly across four approaches.
+(i)~Exact one-cell deletion: the per-cell causal effect recovers only part of
+the raw slope.
+(ii)~$k$-delete ladder: per-cell effects decrease with $k$, ruling out
+collective additivity as a rescue.
+(iii)~Controlled-carrier regression: pooled residual signal is weak and
+within-condition stability is not recovered.
+(iv)~Refined local carrier ($d_2$-adjacency): does not improve slope
+stability and worsens it in several conditions.
+None of the tested local accounts rescues a per-cell causal reading.
+The slope is best treated as a stable empirical structural relation:
+$\iso$ is the best simple carrier of the raw law, but the law does not reduce
+to a direct per-cell causal rate.
+
 \paragraph{On the null decomposition baseline.}
 The choice $\bdeath=-1.0$ is analytically exact rather than empirically
 estimated: an embedded cell is a 4-connected singleton component, so its
@@ -752,22 +766,33 @@ Because component counts and live-cell counts behave differently, this
 coefficient should not be compared directly to live-cell-based estimates.
 
 \paragraph{Open problems.}
-The mechanism question is the obvious open problem.
-The global mediation path through $\fnet$ is insufficient; a more structured
-or non-global path may fare better.
-The dynamic local null leaves a large negative $\bres$, which indicates the
-slope law is driven by something beyond isolated-cell deaths and immediate
-neighbourhood context.
-One candidate account is a \textit{cascade effect}: an embedded cell may
-temporarily stabilise adjacent configurations, so its death triggers
-secondary structural failures that propagate across multiple components
-beyond the local $5\times5$ patch.
-Under this account, the effective causal reach of an embedded cell's death
-extends further than the local null can capture, which would produce the
-observed negative excess.
-A direct test would track downstream component changes triggered by each
-embedded cell's removal across a larger causal window; such a localized causal
-audit is a natural next step.
+The mechanism question is the central open problem.
+The global mediation path through $\fnet$ is insufficient, and the four
+follow-up audits described above have closed the local per-cell causal
+reading.
+The leading open question is whether $\iso$ functions as a compact marker of
+a \textit{world-level fragility regime}---a global structural property of
+the grid state---rather than as the mechanistic atom whose individual deaths
+drive the slope.
+Under a fragility-field interpretation, worlds with more embedded cells are
+in a structural regime where component-level decline is collectively favoured;
+the law would hold at the population level not because each cell individually
+contributes $-1.52$ components, but because the count indexes broader
+grid-level vulnerability.
+This interpretation is consistent with the finding that
+$\iso$-targeted deletion performs \emph{worse than random} across 12/12
+size-by-density conditions in a matched-budget deletion study, while
+coarse block-targeted deletion outperforms $\iso$-targeted in all 12
+conditions---an anti-alignment between predictive-best sites and
+causally effective sites that is expected if the count is a regime marker
+rather than a causal lever.
+
+A temporal robustness check (temporal stride $m\in\{1,2,4\}$) confirms the
+slope law is sign-consistent at all tested strides, with a two-phase $R^2$
+degradation pattern: $R^2$ drops approximately 25--30\% from $m=1$ to
+$m=2$, then stabilises from $m=2$ to $m=4$.
+The law is not locked to the finest temporal articulation tested; the null
+decomposition at $m>1$ is deferred.
 
 Generalisation beyond GoL is an open empirical question.
 Among Life-like rules, HighLife (B36/S23) is a natural first candidate:
