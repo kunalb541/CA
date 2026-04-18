@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.nav
+*.snm
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Project-specific: keep PDF outputs but not per-run logs
+outputs/logs/
+
+# Claude memory
+.claude/
