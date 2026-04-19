@@ -807,13 +807,49 @@ GoL's particular order/chaos boundary or persist across the rule-space continuum
 The functional dependence $\beta(\rho,K,\text{rule set})$ is fully uncharacterised
 and is the most direct route to understanding the scope of the empirical law.
 
+\section{Conclusion}
+\label{sec:conc}
+
+Three empirical regularities in Conway's Game of Life are robustly
+established under fixed, pre-specified observer definitions and decision
+thresholds.
+Observer disagreement is strongly predictable from early fine-scale dynamics
+(partial $r=-0.848$, 95\% bootstrap CI $[-0.862,-0.830]$).
+The optimal predictive scale is target-relative: live-cell count peaks at
+$B=2$ and occupied-block count peaks at $B=8$, with non-overlapping
+bootstrap confidence intervals.
+Embedded isolated cells predict future component-level decline with a stable
+slope (mean $\approx-1.52$, CV~$=0.087$) across six size-by-density
+conditions.
+
+Two stronger mechanism interpretations were pre-specified and explicitly
+rejected: global mediation through component net change fails (mediation
+fraction $-0.072$, CI entirely below zero), and no positive residual
+coupling survives the dynamic local null ($\chi<0$ in all six conditions).
+Follow-up audits further show the slope does not reduce to a per-cell causal
+rate under any tested local account.
+The leading open question is whether the count of embedded isolated cells
+functions as a compact marker of world-level structural fragility rather than
+as a direct causal mechanism.
+All results are scoped to this system; generalisation to other Life-like rules
+and other physical systems remains an open empirical question.
+
 \begin{acknowledgments}
-No external funding was received for this work. The author has no conflicts
-of interest to declare. Simulations were performed using Python~3 with
-NumPy, SciPy, scikit-learn, pandas, Matplotlib, and seaborn.
+No external funding was received for this work.
+Simulations were performed using Python~3 with NumPy, SciPy, scikit-learn,
+pandas, Matplotlib, and seaborn.
 \end{acknowledgments}
 
-\section*{Data and Code Availability}
+\section*{Author Declarations}
+
+\subsection*{Conflict of Interest}
+The author has no conflicts of interest to disclose.
+
+\subsection*{Author Contributions}
+\textbf{K.B.:} conceptualization, methodology, software, investigation,
+formal analysis, writing---original draft, writing---review and editing.
+
+\section*{Data Availability Statement}
 
 All code, simulation outputs, and figure sources are available at
 \url{https://github.com/kunalb541/CA}.
