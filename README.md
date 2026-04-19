@@ -17,9 +17,11 @@ Different coarse-grained descriptions of the same deterministic system can yield
 
 3. **A stable component-change law.** Embedded isolated cells — alive, with no 4-connected live neighbours but at least one diagonal neighbour — predict future component-level decline with a stable OLS slope across six size-by-density conditions (mean slope ≈ −1.52, CV = 0.087, well below the pre-specified threshold of 0.20).
 
-Two stronger mechanism claims are tested and explicitly rejected:
+Two stronger mechanism interpretations are tested and explicitly rejected:
 - Global mediation through component net change: mediation fraction −0.072, bootstrap 95% CI entirely below zero.
 - Residual coupling beyond death and local-neighbourhood dynamics: χ < 0 in all six conditions under the dynamic local null.
+
+Follow-up mechanism audits further show the slope does not reduce to a per-cell causal rate: exact one-cell deletion recovers only part of the slope, a k-delete ladder rules out collective additivity, controlled regressions yield weak residual signal, and d2_adj local refinement fails to improve stability. The slope is best treated as a stable empirical structural relation whose mechanism remains open. A matched-budget deletion study finds iso-targeted deletion performs worse than random (12/12 conditions) while coarse block-targeted deletion outperforms it (12/12), an anti-alignment consistent with the count indexing world-level structural fragility rather than acting as a causal lever. The law is also sign-consistent under temporal subsampling at strides m ∈ {1, 2, 4}.
 
 All results are established computationally within GoL. Generalisation beyond this system is an open empirical question.
 
@@ -38,7 +40,7 @@ outputs/
   data/                # Simulation data CSVs and stats JSON files
   figures/             # All paper figures (PDF + PNG)
   tables/              # Summary tables (CSV)
-  logs/                # LaTeX auxiliary files, adjudication note
+  logs/                # Adjudication note (LaTeX aux files are gitignored)
 ```
 
 ---
