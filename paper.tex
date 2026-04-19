@@ -50,9 +50,10 @@ The predictive scale that best forecasts a future observable depends on which
 observable: time-averaged live-cell count peaks at an intermediate scale
 ($B=2$) while occupied-block count peaks at its own native scale ($B=8$),
 with non-overlapping bootstrap confidence intervals.
-A linear law linking embedded isolated cells to future component-level decline
-is stable across six size-by-density conditions
-(mean slope $\approx-1.52$, CV~$\approx0.09$).
+A stable empirical relation linking embedded isolated cells to future
+component-level decline holds across six size-by-density conditions
+within GoL (mean slope $\approx-1.52$, CV~$\approx0.09$; two grid sizes,
+three density bands, one deterministic rule).
 Two stronger mechanism claims---global mediation through component net change,
 and residual-coupling beyond death and local-neighbourhood dynamics---do not
 survive their pre-specified tests.
@@ -201,7 +202,7 @@ Ensemble & Grid & $N$ & $T$ & Seed & Main statistic \\
 \midrule
 Observer-disagreement  & $64^2$         & 1000     & 250 & 20260325      & Pearson/partial $r$ \\
 Predictive-scale       & $128^2$        & 500      & 250 & 20260326      & Ridge CV $R^2$ \\
-Component-change law   & $64^2/128^2$   & 300--400 & 250 & 20260328+$k$  & OLS slope \\
+Component-change law   & $64^2/128^2$   & 300--400 & 250 & 20260328+$k$, $k=0,\ldots,5$ & OLS slope \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -455,11 +456,13 @@ are best answered from different vantage points.
 The two primary targets' bootstrap peak-$B$ confidence intervals do not
 overlap: $\Nlive$ peaks at $B=2$ with CI $[2,4]$, while $\Nocc$ peaks at
 $B=8$ with CI $[8,8]$.
-The exact $[8,8]$ interval for $\Nocc$ is especially strong: in the bootstrap
-resampling, no alternative scale displaced the block observer's own native
-scale as the best predictor of its future occupied-block population.
+The $[8,8]$ interval is the paper's sharpest single result: across all
+1000 bootstrap resamples of the world distribution, not one resample placed
+the peak anywhere other than $B=8$.
+The block observer's own native scale is maximally informative about its own
+future population under every perturbation of the world sample examined.
 
-\section{A Stable Law for Component Change}
+\section{A Stable Empirical Relation for Component Change}
 \label{sec:D}
 
 \subsection{Motivation for the embedded-isolated-cell predictor}
@@ -557,11 +560,16 @@ The distinction matters: the law is as solid as the CV figure suggests; the
 mechanism behind it is an open question.
 
 The $R^2$ values vary more than the slopes do, ranging from 0.30 to 0.68.
-This variation reflects the different dynamical character of the density
-regimes rather than instability in the relationship: in low-density
-conditions the future trajectory is more structured and thus easier to
-predict from a single feature, while in high-density conditions the
-dynamics are more variable.
+This reflects variation in outcome noise across density regimes, not
+instability in the slope.
+In low-density conditions the post-transient grid converges toward sparse
+stable structures with relatively constrained component trajectories,
+reducing noise and raising $R^2$ (peak: $R^2=0.684$, $128^2$ low-density).
+In high-density conditions the dynamics are richer and the outcome variance
+is higher, suppressing $R^2$ even though the slope is comparable.
+The predictor slope captures the signal-to-signal ratio across conditions;
+$R^2$ captures signal-to-noise within a condition and is expected to vary
+as the noise floor changes.
 
 \subsection{Circularity and selection concerns}
 
@@ -635,17 +643,31 @@ net change; it does not meet the pre-specified threshold.}
 However, the mediation test fails.
 The estimated indirect effect is $-4.61\times10^{-4}$, with mediation fraction
 $-0.072$ and bootstrap 95\% CI $[-0.145,\,-0.007]$.
-This interval lies entirely below zero and fails to exceed $0.50$.
-The supported reading is therefore that embedded isolated cells are
-harbingers of later disagreement, not established global mediators of it.
+The CI lies entirely below zero: the indirect effect is not merely small but
+reliably negative, indicating a suppression pattern.
+The a-path coefficient (embedded $\to$ $\fnet$) is $-1.225$: more embedded
+cells predict more negative $\fnet$.
+The b-path coefficient ($\fnet$ $\to$ $G$) is $+3.76\times10^{-4}$:
+more negative $\fnet$ corresponds to slightly more positive $G$, as expected
+(lower fine-scale component count reduces $\netF$, widening the gap).
+The product $a\times b$ is therefore negative: via the $\fnet$ pathway,
+embedded cells predict a reduction in $G$, opposing the positive direct
+association.
+This suppression arises because the b-path is extremely weak (near zero),
+so the indirect pathway carries negligible positive signal while the
+product of the two slopes yields a small but reliably negative value.
+The direct effect ($+6.83\times10^{-3}$) exceeds the total effect
+($+6.37\times10^{-3}$) because the suppressor removes noise, not signal.
+The conclusion is unambiguous: fine-scale component net change over $[50,250]$
+is not a positive mediator between embedded cell count and the narrative gap.
 
 A design note: the outcome $G$ is computed over the full $[0,250]$ window
 while the mediator $\fnet$ uses the post-predictor window $[50,250]$.
 The mismatch means $G$ absorbs dynamics from steps $0$--$50$ that precede the
-predictor measurement, which can only attenuate the mediation estimate.
-A fully aligned test would use $G_{[50,250]}$ as the outcome; we do not
-re-run it here because the mediation fraction already fails by a wide margin
-($-0.072$ with CI entirely below zero).
+predictor measurement.
+A fully aligned test would use $G_{[50,250]}$ as the outcome; given that the
+indirect effect is already reliably negative under the current design, an
+aligned version would if anything strengthen the null result.
 
 \subsection{Null decomposition of the component-change law}
 
@@ -749,6 +771,28 @@ The large negative $\bres$ ($\chi_{\rm mean}=-1.78$) therefore cannot be
 explained away by the choice of baseline; any reasonable rescaling leaves the
 qualitative conclusion intact.
 
+\paragraph{Relation to causal emergence frameworks.}
+Causal emergence in the sense of \citet{hoel2013} is defined via effective
+information (EI): a macro-scale description exhibits causal emergence if
+intervening at the macro level reduces uncertainty about effects more than
+intervening at the micro level, measured by the KL divergence of the
+intervention-conditional distribution.
+The narrative gap $G$ used here is categorically different.
+$G$ is a signed scalar — the difference between two observers' normalised
+net-change counts over the same window — and carries no information-theoretic
+interpretation: it can be positive or negative, is not invariant to invertible
+reparametrisation, and measures signed observer disagreement rather than
+information loss or causal leverage.
+GoL is the test bed because it provides deterministic, reproducible,
+multi-scale dynamics with analytically characterisable structure; the
+specific questions asked (predictability of disagreement, scale-dependence
+of forecasting optimum, coefficient stability) are designed to have
+binary verdicts that do not depend on information-theoretic choices.
+The keyword ``causal emergence'' in this paper locates the work in the
+broader observer-dependence-of-description literature; it does not claim
+any specific relationship to EI-based emergence measures, and the results
+do not transfer to EI comparisons without substantial additional analysis.
+
 \paragraph{Observer definition and numerical scope.}
 All analyses in this paper use a single fine measurement scheme:
 4-connected component count on the torus.
@@ -819,8 +863,8 @@ The optimal predictive scale is target-relative: live-cell count peaks at
 $B=2$ and occupied-block count peaks at $B=8$, with non-overlapping
 bootstrap confidence intervals.
 Embedded isolated cells predict future component-level decline with a stable
-slope (mean $\approx-1.52$, CV~$=0.087$) across six size-by-density
-conditions.
+slope across six size-by-density conditions within GoL
+(mean $\approx-1.52$, CV~$=0.087$; two grid sizes, three density bands).
 
 Two stronger mechanism interpretations were pre-specified and explicitly
 rejected: global mediation through component net change fails (mediation
