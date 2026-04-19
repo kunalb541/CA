@@ -1,4 +1,4 @@
-# Observer Disagreement, Predictive Scale, and a Stable Component-Change Law in Conway's Game of Life
+### Observer Disagreement, Predictive Scale, and a Stable Component-Change Law in Conway's Game of Life
 
 **Kunal Bhatia** · Independent Researcher, Heidelberg, Germany  
 ORCID: [0009-0007-4447-6325](https://orcid.org/0009-0007-4447-6325)
