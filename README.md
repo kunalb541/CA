@@ -144,15 +144,6 @@ pytest test_regression.py -v
 
 ---
 
-## Citation
-
-```
-Bhatia, K. (2026). Embedded Isolates Predict Fine-Component Loss in Life-Like
-Cellular Automata. Preprint. https://github.com/kunalb541/CA
-```
-
----
-
 ## License
 
 MIT — see [LICENSE](LICENSE).
