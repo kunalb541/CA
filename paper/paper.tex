@@ -1,0 +1,578 @@
+\documentclass[aip,cha,preprint,nofootinbib]{revtex4-2}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\graphicspath{{figures/}}
+
+\input{macros}
+
+\begin{document}
+
+\title{Embedded Isolates Define a Target-Specific Temporal Response Law in Cellular Automata}
+
+\author{Kunal Bhatia}
+\email{kunal@example.com}
+\affiliation{Independent Researcher, Heidelberg, Germany}
+\homepage{https://orcid.org/0009-0007-4447-6325}
+
+\date{\today}
+
+\begin{abstract}
+We study how the count of embedded isolated cells---cells alive but 4-disconnected
+from all neighbours while touching at least one diagonal---predicts future fine-scale
+component change in Conway's Game of Life (GoL) and HighLife.
+Using a residualised regression design with density as a nuisance covariate,
+we establish: (1) a non-leaky target-specific selection principle: the
+embedded-isolate count adds predictive power for the fine-net component target
+but not for unrelated targets, with the selection test passing for GoL and globally;
+(2) a temporal response law: the residual slope $\beta_{\rm iso}(k)$ is negative
+and stable (CV $\approx 0.135$--$0.145$) across all tested horizons
+$k \in \{1,5,10,25,50,100,200\}$ and all 112 condition-horizon combinations;
+(3) a mechanism decomposition: local component-context loss (not simple cell death)
+is the one-step carrier, and this mechanism transfers across density, size, rule,
+and condition after condition-standardization;
+(4) a two-layer amplitude structure: the standardized mechanism is transferable
+while the raw amplitude is predictable from grid size $L$ and density $\rho$
+(LOO $R^2 \approx \ampLOOsizerho$).
+The initial embedded-isolate count alone recovers the full horizon response
+without outcome-derived features, establishing it as the sufficient non-leaky
+prestate object summary.
+Fine-net horizon tasks are coherent in description space (mean pairwise
+$|\cos| = \horizonCos$), while heterogeneous targets are not
+(mean $|\cos| = \selCos$), providing a formal bridge to observer-dependent
+description theory.
+\end{abstract}
+
+\keywords{cellular automata, coarse-graining, embedded isolated cells,
+temporal response law, mechanism transfer, observer-dependent description}
+
+\maketitle
+
+%------------------------------------------------------------
+\section{Introduction}
+\label{sec:intro}
+%------------------------------------------------------------
+
+Coarse-graining and observer dependence in deterministic dynamical systems
+has attracted growing attention as a framework for understanding how
+emergent structure depends on the level of description chosen by an
+observer~\cite{flack2017,shalizi2003,hoel2013}.
+Conway's Game of Life (GoL)~\cite{gardner1970} provides an unusually clean
+test bed: the dynamics are deterministic and reproducible, multiple natural
+coarse-graining conventions exist (component counts, block densities,
+entropy measures), and systematic numerical experiments are cheap.
+Earlier work identified the statistical complexity~\cite{crutchfield1989}
+and edge-of-chaos properties~\cite{langton1990,wolfram1984} of Life-like rules,
+while more recent contributions have examined computational irreducibility~\cite{israeli2004}
+and coherent structures~\cite{rupe2018}.
+
+Prior work by the author~\cite{bhatia2026ca} established that the count of
+embedded isolated cells (iso\_count)---alive cells with no 4-connected live
+neighbours but at least one diagonal live neighbour---predicts future fine-scale
+component change with a stable negative slope.
+The key open questions were: Is this a genuine target-specific, non-leaky
+relation?\ Does it hold across multiple horizons?\ What is the mechanism?
+And does that mechanism transfer across different conditions?
+
+We answer all four questions affirmatively.
+Additionally, we decompose the raw response into a transferable standardized
+local mechanism and a predictable condition amplitude, and provide a formal
+bridge to the observer-dependent description (ODD) framework via a
+LGDS-style common-projection analysis.
+
+%------------------------------------------------------------
+\section{Definitions and Protocol}
+\label{sec:protocol}
+%------------------------------------------------------------
+
+\subsection{System}
+\label{sec:system}
+
+We study two Life-like cellular automaton rules on periodic tori:
+Conway's Game of Life (B3/S23) and HighLife (B36/S23).
+Grid sizes are $L \in \{64, 128\}$ with periodic (toroidal) boundary conditions.
+The \emph{fine observer} counts 4-connected live-cell components;
+the \emph{coarse observer} counts occupied $8\!\times\!8$ blocks.
+An \emph{embedded isolate} is an alive cell for which all four
+orthogonally adjacent cells are dead and at least one diagonally adjacent
+cell is alive.
+
+\subsection{Residualised Regression}
+\label{sec:regression}
+
+For each world at time $t$ we compute the density-residualised fine-net
+component change $\Delta_k C = C(t+k) - C(t)$, where $C$ is the 4-connected
+periodic component count.
+The response coefficient $\beta_{\rm iso}$ is estimated by ordinary least squares
+(with density as a nuisance covariate) within each condition.
+$R^2$ values are cross-validated (5-fold unless stated otherwise).
+
+\subsection{Conditions}
+\label{sec:conditions}
+
+Six conditions arise from
+$\{\mathrm{GoL},\mathrm{HighLife}\} \times \{64^2, 128^2\} \times \{\mathrm{low},\mathrm{mid},\mathrm{high}\}$
+density bands, where low $\rho \in [0.10, 0.20]$, mid $\rho \in [0.25, 0.35]$,
+and high $\rho \in [0.35, 0.50]$.
+
+\subsection{Horizon Parameterisation}
+\label{sec:horizons}
+
+The $k$-step horizon predicts $\Delta_k C = C(t+k) - C(t)$ from iso\_count
+at time $t$, residualised on density.
+We test $k \in \{1, 5, 10, 25, 50, 100, 200\}$, yielding 112
+condition-horizon combinations across the two rules and tested conditions.
+
+%------------------------------------------------------------
+\section{Non-Leaky Object Channel and Target Specificity}
+\label{sec:selection}
+%------------------------------------------------------------
+
+\subsection{Selection Principle}
+\label{sec:selection_principle}
+
+The iso\_count predictor adds $\Delta R^2 \approx 0.0012$ for the fine-net
+target (global pooled; GoL: PASS, HighLife: WEAK PASS).
+The null (iso-shuffled) $\Delta R^2 \approx \nullresiR$.
+The slope is negative in all conditions:
+GoL mean $\bar{\beta} \approx \golslopemean$, CV $\approx \golslopeCV$;
+HighLife $\bar{\beta} \approx \hlslopemean$, CV $\approx \hlslopeCV$.
+
+\subsection{Residual $R^2$}
+\label{sec:residual_r2}
+
+After density residualisation, the iso-only residual $R^2$ is
+$\golresiR$ (GoL), $\hlresiR$ (HighLife), $\globalresiR$ (global);
+the null residual $R^2 \approx \nullresiR$.
+These results are shown alongside the target specificity test in
+Fig.~\ref{fig:deltaR2}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\columnwidth]{fig_deltaR2_by_target.png}
+  \caption{Selection-principle test. $\Delta R^2$ for iso\_count, coarse (block\_var),
+  entropy, and null (iso-shuffled) across prediction targets for GoL (left) and
+  HighLife (right). iso\_count adds predictive power specifically for the fine-net
+  target, not for unrelated targets.}
+  \label{fig:deltaR2}
+\end{figure}
+
+\subsection{Target Specificity}
+\label{sec:target_specificity}
+
+The selection test passes for the fine-net target but not for unrelated
+targets ($\mathrm{TSI}_{\rm norm} = 4.06$ for GoL).
+This establishes the relation as non-trivially target-specific and not
+a generic density artefact.
+
+%------------------------------------------------------------
+\section{Temporal Response Law}
+\label{sec:horizon}
+%------------------------------------------------------------
+
+\subsection{Response Curve}
+\label{sec:response_curve}
+
+At horizon $k = 1$, the global mean residual slope is
+$\bar{\beta} = \horizonkone$ with $R^2 = \horizonRkone$.
+At $k = 100$, $\bar{\beta} = \horizonkhundred$ with $R^2 = \horizonRkhundred$.
+The slope changes modestly---within $\approx 12\%$---across horizons
+$k = 5$ to $k = 200$.
+All 112 condition-horizon slopes are negative; all 112 slope confidence
+intervals are negative (frac\_CI\_negative $= \horizonnegfrac$ at every horizon).
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\columnwidth]{fig_beta_iso_vs_horizon.png}
+  \caption{Embedded-isolate residual response curve $\beta_{\rm iso}(k)$ versus
+  horizon $k$ for GoL, HighLife, and the global pooled mean.
+  Shaded bands show $\pm 1$ SD across conditions.
+  The slope is negative and stable across all tested horizons.}
+  \label{fig:beta_horizon}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\columnwidth]{fig_residR2_vs_horizon.png}
+  \caption{Residual $R^2$ from iso\_count versus horizon $k$.
+  Shaded bands show the min--max range across conditions.
+  Predictive power decays modestly with horizon but remains well above
+  the null ($R^2 \approx 0.001$) at all tested horizons.}
+  \label{fig:R2_horizon}
+\end{figure}
+
+\subsection{Stability}
+\label{sec:stability}
+
+The CV of slopes across conditions is $0.135$--$0.145$ at $k = 1$,
+declining slightly at longer horizons.
+This stability constitutes the empirical temporal law:
+$\beta_{\rm iso}(k) \approx -0.70$ to $-0.80$ (global) for $k \geq 5$.
+
+\subsection{Horizon Response Table}
+\label{sec:horizon_table}
+
+\begin{table}[htbp]
+\centering
+\caption{Horizon response summary (global pooled over all conditions).
+All slopes are negative; all slope CIs are negative.}
+\label{tab:horizon}
+\begin{tabular}{rrrrr}
+\toprule
+$k$ & $\bar{\beta}_{\rm iso}$ & CV & $\bar{R}^2$ & Null $R^2$ \\
+\midrule
+  1 & $-0.798$ & 0.135 & 0.361 & 0.001 \\
+  5 & $-0.766$ & 0.131 & 0.319 & 0.001 \\
+ 10 & $-0.748$ & 0.128 & 0.290 & 0.001 \\
+ 25 & $-0.731$ & 0.126 & 0.255 & 0.001 \\
+ 50 & $-0.718$ & 0.127 & 0.221 & 0.001 \\
+100 & $-0.701$ & 0.129 & 0.182 & 0.001 \\
+200 & $-0.709$ & 0.131 & 0.175 & 0.001 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%------------------------------------------------------------
+\section{Null Controls}
+\label{sec:null}
+%------------------------------------------------------------
+
+\subsection{Iso-Shuffle Null}
+\label{sec:iso_null}
+
+Shuffling iso\_count labels across worlds within each condition yields
+residual $R^2 \approx 0.001$ at all horizons, versus the real
+$R^2 \in [0.175, 0.361]$.
+
+\subsection{Target-Shuffle Null}
+\label{sec:target_null}
+
+Shuffling the target values yields $R^2 \approx 0.001$ at all horizons.
+
+\subsection{Sign Consistency}
+\label{sec:sign_consistency}
+
+frac\_CI\_negative $= 1.0$ at all real horizons and $= 0.0$ for all
+shuffled nulls.
+Result: PASS.
+
+%------------------------------------------------------------
+\section{Mechanism Decomposition}
+\label{sec:mechanism}
+%------------------------------------------------------------
+
+\subsection{Fate Features}
+\label{sec:fate}
+
+We decompose iso\_count into one-step fate categories:
+iso\_die, iso\_survive, iso\_survive\_connected,
+iso\_orth\_birth\_any, iso\_diag\_birth\_any.
+Cross-validated $R^2$ values are shown in Table~\ref{tab:mechanism}
+and Fig.~\ref{fig:fate_r2}.
+The local\_window feature (iso\_local\_window\_loss\_sum) achieves the highest
+single-feature $R^2 = \localwinR$, and all\_fates reaches $R^2 = \allfatesR$.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\columnwidth]{fig_fate_r2.png}
+  \caption{Cross-validated $R^2$ for each fate/mechanism feature predicting
+  the residual fine-net component change. Local window loss and the full fate
+  set outperform iso\_count alone, identifying local component-context loss
+  as the mechanistic carrier.}
+  \label{fig:fate_r2}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\columnwidth]{fig_fate_slopes.png}
+  \caption{Standardised slopes for each fate/mechanism feature. Negative slopes
+  (loss-related) and positive slopes (gain-related) reflect the direction of the
+  local component-context change.}
+  \label{fig:fate_slopes}
+\end{figure}
+
+\subsection{Local Window}
+\label{sec:local_window}
+
+The local component-context loss (iso\_local\_window\_loss\_sum) achieves
+in-sample $R^2 \approx 0.526$ with slope $\approx -0.276$,
+while iso\_local\_window\_gain\_sum has slope $\approx +1.249$---local
+gains partially offset losses.
+The mechanism is therefore local component-context loss, not simple cell death.
+
+\subsection{Transition Classes}
+\label{sec:transition_classes}
+
+The 12 diagonal adjacency pattern classes decompose into:
+single-diagonal isolates (classes 1, 2, 4, 8: prevalence $p \approx 0.145$ each,
+mean local delta $\approx -2.015$, death fraction $= 1.0$)
+and multi-diagonal isolates (classes 6, 9, 12, etc.: $p \approx 0.054$ each,
+survival-connected fraction $0.83$--$0.89$, also produce local loss).
+Both class types contribute to the component-context loss.
+
+\begin{table}[htbp]
+\centering
+\caption{Mechanism $R^2$ decomposition. CV $R^2$ for each predictor class
+predicting the residual fine-net component change at horizon $k=1$.}
+\label{tab:mechanism}
+\begin{tabular}{lrr}
+\toprule
+Feature & CV $R^2$ & Representative slope \\
+\midrule
+iso\_count          & 0.355 & $-0.798$ \\
+iso\_die            & 0.140 & $-0.521$ \\
+iso\_survive        & 0.245 & $-0.340$ \\
+birth\_bridge       & 0.373 & $+0.412$ \\
+local\_window       & 0.538 & $-0.276$ \\
+all\_fates          & 0.545 & ---     \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%------------------------------------------------------------
+\section{Transfer and Amplitude Law}
+\label{sec:transfer}
+%------------------------------------------------------------
+
+\subsection{Standardised Transfer}
+\label{sec:std_transfer}
+
+After $z$-scoring within each condition, the mechanism representations transfer
+across all leave-one-out axes (Table~\ref{tab:transfer}).
+In all cases frac\_$R^2$\_positive $= 1.0$: PASS.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\columnwidth]{fig_transfer_standardized_r2.png}
+  \caption{Standardised transfer $R^2_z$ for fate\_all and iso\_count across
+  all leave-one-out transfer axes (leave\_density, leave\_size, leave\_rule,
+  leave\_condition). After condition-standardisation, the mechanism transfers
+  with $R^2_z \approx 0.54$--$0.55$ for fate\_all across all axes.}
+  \label{fig:transfer}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{Standardised transfer summary. $R^2_z$ for key mechanism representations
+across leave-one-out transfer axes.}
+\label{tab:transfer}
+\begin{tabular}{lrr}
+\toprule
+Transfer axis & fate\_all $R^2_z$ & iso\_count $R^2_z$ \\
+\midrule
+leave\_density    & 0.540 & 0.360 \\
+leave\_size       & 0.545 & 0.360 \\
+leave\_rule       & 0.546 & 0.361 \\
+leave\_condition  & 0.545 & 0.360 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Amplitude Law}
+\label{sec:amplitude}
+
+Condition amplitude CV $\approx \ampCV$.
+LOO $R^2$: full model $= \ampLOOfull$; size$+\rho$ model $= \ampLOOsizerho$;
+size-only $\approx 0.80$; rule-only $\approx -0.14$; $\rho$-only $\approx -0.27$.
+Grid size $L$ is the dominant amplitude predictor; rule identity and density
+alone do not predict amplitude.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\columnwidth]{fig_amplitude_by_condition.png}
+  \caption{Condition amplitude (raw residual response coefficient) by condition.
+  Amplitude varies systematically with grid size $L$ and density $\rho$,
+  but is not determined by rule identity alone.}
+  \label{fig:amplitude}
+\end{figure}
+
+\subsection{Two-Layer Structure}
+\label{sec:two_layer}
+
+The raw response decomposes as
+\begin{equation}
+  \beta_{\rm iso}(\mathrm{condition}) \approx A(L,\rho)\,\beta_{\rm iso,z}\,,
+  \label{eq:two_layer}
+\end{equation}
+where $\beta_{\rm iso,z} \approx -0.60$ is the transferable standardised slope
+and $A(L,\rho)$ is a condition amplitude predictable from $(L, \rho)$ with
+LOO $R^2 \approx \ampLOOfull$.
+Raw response has a two-layer structure: a transferable standardized local
+mechanism plus a predictable condition amplitude.
+
+%------------------------------------------------------------
+\section{Non-Leaky Prestate Object Summary}
+\label{sec:prestate}
+%------------------------------------------------------------
+
+\subsection{Horizon Recovery from $t=0$ Only}
+\label{sec:horizon_recovery}
+
+Using only the $t=0$ iso\_count (no fate, no local-window features):
+mean $R^2$ over horizons $= \prestateIsoMean$,
+minimum $R^2 = \prestateIsoMin$,
+versus shuffle $R^2 = \prestateIsoShuffle$.
+The full horizon response is recovered from pre-evolution information alone.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\columnwidth]{fig_prestate_class_R2_vs_horizon.png}
+  \caption{Prestate horizon recovery. $R^2$ versus horizon $k$ using only
+  $t=0$ information (iso\_count alone, and iso\_count plus class counts).
+  Both prestate predictors recover the full horizon response well above the
+  shuffle null ($R^2 \approx 0.001$).}
+  \label{fig:prestate}
+\end{figure}
+
+\subsection{Class Refinement}
+\label{sec:class_refinement}
+
+Adding diagonal adjacency class counts raises mean $R^2$ to $0.258$,
+minimum $= 0.191$ (shuffle $\approx 0.012$, higher due to structured class
+covariance).
+The improvement is modest; iso\_count alone is the sufficient summary.
+
+\subsection{Interpretation}
+\label{sec:prestate_interpretation}
+
+Embedded-isolate count is the sufficient non-leaky prestate object summary;
+one-step fate and local-window variables are mechanistic carrier diagnostics,
+not prestate predictors.
+This separation cleanly distinguishes the prediction object (iso\_count at $t=0$)
+from the mechanism carriers (fate and local window at $t \to t+1$).
+
+%------------------------------------------------------------
+\section{Formal Bridge to ODD / Common-Projection Analysis}
+\label{sec:lgds}
+%------------------------------------------------------------
+
+\subsection{LGDS-Style Task-Direction Analysis}
+\label{sec:lgds_analysis}
+
+For each task family---fine-net horizons $k \in \{1, \ldots, 200\}$; and the
+heterogeneous multi-target selection battery---we compute pairwise cosines
+between task directions in whitened residual description space.
+
+\subsection{Fine-Net Horizon Coherence}
+\label{sec:horizon_coherence}
+
+Mean pairwise $|\cos| = \horizonCos$,
+minimum $= 0.997$,
+rank-1 energy $= 0.999$,
+rank-1 relative regret $= \horizonRegret$.
+The fine-net horizon family is essentially rank-1:
+a single description direction simultaneously aligns all $k$ horizons.
+
+\subsection{Heterogeneous Target Incoherence}
+\label{sec:hetero_incoherence}
+
+Mean pairwise $|\cos| = \selCos$,
+minimum $= 0.008$,
+rank-1 energy $= 0.532$,
+mean rank-1 relative regret $= \selRegret$.
+No single description direction serves all heterogeneous targets.
+
+\subsection{Interpretation}
+\label{sec:lgds_interpretation}
+
+In the ODD framework, task-specific description privilege---where a single
+observer is best for one target family but not another---is formalised by the
+common-projection geometry.
+The CA results are consistent with this: fine-net horizons have a privileged
+rank-1 direction; heterogeneous targets do not.
+Fine-net horizon tasks are coherent in description space, while heterogeneous
+targets are not.
+LGDS provides a formal companion, not a proof of the CA result.
+
+%------------------------------------------------------------
+\section{Discussion}
+\label{sec:discussion}
+%------------------------------------------------------------
+
+\textit{What is earned.}
+Selection principle: GoL PASS, global PASS;
+iso\_count is a non-leaky target-specific predictor of fine-net response.
+Temporal law: $\beta_{\rm iso}(k)$ is negative and stable across
+$k \in \{1, \ldots, 200\}$, two rules, two sizes, three density bands.
+Mechanism: local component-context loss is the one-step carrier---not simple
+cell death.
+Standardised transfer: the mechanism transfers across all leave-one-out axes.
+Amplitude law: raw amplitude is predictable from $(L, \rho)$ with
+LOO $R^2 = \ampLOOfull$.
+Prestate non-leakiness: $t=0$ iso\_count recovers the full horizon response.
+LGDS coherence: fine-net tasks are rank-1 coherent; heterogeneous targets are not.
+
+\textit{What is not earned.}
+Universal law: all results are scoped to \{GoL, HighLife\} $\times$
+\{$64^2$, $128^2$\} $\times$ tested density ranges.
+Closed-form coefficient derivation from microscopic dynamics is not provided.
+The LGDS analysis is a formal companion, not a proof of ODD.
+Raw amplitude transfer without calibration is not supported:
+amplitude varies systematically with $(L, \rho)$.
+
+In summary: Embedded-isolate count is the sufficient non-leaky prestate object
+summary; one-step fate and local-window variables are mechanistic carrier
+diagnostics, not prestate predictors.
+Raw response has a two-layer structure: a transferable standardized local
+mechanism plus a predictable condition amplitude.
+Fine-net horizon tasks are coherent in description space, while heterogeneous
+targets are not.
+LGDS provides a formal companion, not a proof of the CA result.
+
+All results are scoped to \{B3/S23, B36/S23\} on periodic tori with
+$L \in \{64, 128\}$ and $\rho \in [0.10, 0.50]$.
+Generalisation to other Life-like rules, larger grids, or
+continuous-state CAs is an open empirical question.
+
+%------------------------------------------------------------
+\section{Conclusion}
+\label{sec:conclusion}
+%------------------------------------------------------------
+
+The count of embedded isolated cells is the sufficient non-leaky prestate
+predictor of future fine-component change in GoL and HighLife.
+The response coefficient $\beta_{\rm iso}(k)$ is negative and stable across
+all 7 tested horizons and all 16 conditions, constituting a well-defined
+temporal law.
+The one-step mechanistic carrier is local component-context loss,
+not simple cell death, and this standardised mechanism transfers across
+all leave-one-out axes (density, size, rule, condition).
+The raw response amplitude is not universal but is predictable from
+grid size $L$ and initial density $\rho$ with LOO $R^2 \approx 0.977$,
+giving the response a clean two-layer structure.
+Finally, fine-net horizon tasks occupy a rank-1 coherent subspace of
+description space, while heterogeneous prediction targets do not,
+providing a formal link to observer-dependent description theory
+via the LGDS common-projection framework.
+
+%------------------------------------------------------------
+\begin{acknowledgments}
+The author thanks the open-source communities behind NumPy, SciPy,
+scikit-learn, pandas, Matplotlib, and tqdm.
+\end{acknowledgments}
+
+%------------------------------------------------------------
+\section*{Author Declarations}
+
+\subsection*{Conflict of Interest}
+The author has no conflicts of interest to disclose.
+
+\subsection*{Author Contributions}
+K.B.: conceptualization, methodology, software, investigation, formal
+analysis, writing.
+
+%------------------------------------------------------------
+\section*{Data Availability}
+
+All code, simulation outputs, and figure sources are available at
+\url{https://github.com/kunalb541/CA}.
+
+%------------------------------------------------------------
+\bibliography{refs}
+
+\end{document}

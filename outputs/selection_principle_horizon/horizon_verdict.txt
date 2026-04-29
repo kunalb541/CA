@@ -1,0 +1,39 @@
+CA Horizon Response Test
+Boundary/connectivity: periodic torus, 4-connected fine components.
+Embedded isolate: alive, 4-isolated orthogonally, at least one diagonal live neighbor.
+Horizons: [1, 5, 10, 25, 50, 100, 200]
+
+GoL: PASS
+  mean residual R2 over horizons = 0.2482
+  mean null R2 over horizons = 0.0012
+  all horizons have all condition slopes negative? True
+  horizon table:
+    k=  1: mean_slope=-0.8121, CV=0.173, mean_R2=0.3669, null_R2=0.0009, frac_CI_neg=1.00
+    k=  5: mean_slope=-0.7211, CV=0.148, mean_R2=0.2872, null_R2=0.0007, frac_CI_neg=1.00
+    k= 10: mean_slope=-0.7180, CV=0.141, mean_R2=0.2663, null_R2=0.0018, frac_CI_neg=1.00
+    k= 25: mean_slope=-0.7062, CV=0.151, mean_R2=0.2280, null_R2=0.0020, frac_CI_neg=1.00
+    k= 50: mean_slope=-0.6965, CV=0.134, mean_R2=0.2055, null_R2=0.0019, frac_CI_neg=1.00
+    k=100: mean_slope=-0.7131, CV=0.135, mean_R2=0.1961, null_R2=0.0006, frac_CI_neg=1.00
+    k=200: mean_slope=-0.7097, CV=0.120, mean_R2=0.1875, null_R2=0.0003, frac_CI_neg=1.00
+
+HighLife: PASS
+  mean residual R2 over horizons = 0.2341
+  mean null R2 over horizons = 0.0010
+  all horizons have all condition slopes negative? True
+  horizon table:
+    k=  1: mean_slope=-0.7838, CV=0.167, mean_R2=0.3554, null_R2=0.0004, frac_CI_neg=1.00
+    k=  5: mean_slope=-0.6993, CV=0.153, mean_R2=0.2744, null_R2=0.0009, frac_CI_neg=1.00
+    k= 10: mean_slope=-0.7061, CV=0.118, mean_R2=0.2538, null_R2=0.0011, frac_CI_neg=1.00
+    k= 25: mean_slope=-0.6997, CV=0.146, mean_R2=0.2250, null_R2=0.0013, frac_CI_neg=1.00
+    k= 50: mean_slope=-0.7024, CV=0.151, mean_R2=0.1984, null_R2=0.0011, frac_CI_neg=1.00
+    k=100: mean_slope=-0.6888, CV=0.145, mean_R2=0.1688, null_R2=0.0012, frac_CI_neg=1.00
+    k=200: mean_slope=-0.7078, CV=0.134, mean_R2=0.1629, null_R2=0.0011, frac_CI_neg=1.00
+
+Global: PASS
+  mean residual R2 over horizons = 0.2412
+  mean null R2 over horizons = 0.0011
+  all horizons have all condition slopes negative? True
+
+Interpretation lock:
+PASS supports a temporal residual response curve beta_iso(k).
+FAIL means the k=100 residual law may be horizon-specific or unstable.

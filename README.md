@@ -1,126 +1,103 @@
-# Observer Disagreement, Predictive Scale, and a Stable Component-Change Law in Conway's Game of Life
+# Embedded Isolates Define a Target-Specific Temporal Response Law in Cellular Automata
 
 **Kunal Bhatia** · Independent Researcher, Heidelberg, Germany  
 ORCID: [0009-0007-4447-6325](https://orcid.org/0009-0007-4447-6325)
 
-Preprint submitted to *Chaos* (AIP). Not peer reviewed.
+> **Note:** This repo previously contained an earlier CA observer-disagreement paper. That paper has been superseded by the response-law paper documented here. The original simulation engine (`ca.py`) and regression tests are preserved.
 
 ---
 
-## What this paper establishes
+## Core result
 
-Different coarse-grained descriptions of the same deterministic system can yield different accounts of net change. Using Conway's Game of Life (GoL) as a controlled test bed, we establish three empirical regularities:
+The count of *embedded isolated cells* — alive cells with no 4-connected live neighbours but at least one diagonal live neighbour — is the **sufficient non-leaky prestate object summary** for future fine-component change in GoL and HighLife.
 
-1. **Predictable observer disagreement.** A *fine observer* (4-connected component count on the torus) and a *coarse observer* (occupied 8×8 block count) can accumulate opposite net-change narratives over the same deterministic run. The disagreement — measured as a normalised narrative gap *G* — is strongly predicted by early fine-scale component dynamics: partial *r* = −0.848 (95% bootstrap CI [−0.862, −0.830], *N* = 1000) after controlling for initial density.
-
-2. **Target-relative predictive scale.** The observation scale that best forecasts a future quantity depends on which quantity. Time-averaged live-cell count peaks at *B* = 2; occupied-block count peaks at *B* = 8. The bootstrap confidence intervals for these two peak locations are non-overlapping ([2, 4] vs [8, 8]), providing direct evidence against a single universally optimal scale.
-
-3. **A stable empirical relation for component change.** Embedded isolated cells — alive, with no 4-connected live neighbours but at least one diagonal neighbour — predict future component-level decline with a stable OLS slope across six size-by-density conditions within GoL (mean slope ≈ −1.52, CV = 0.087, well below the pre-specified threshold of 0.20; two grid sizes, three density bands).
-
-Two stronger mechanism interpretations are tested and explicitly rejected:
-- Global mediation through component net change: mediation fraction −0.072, bootstrap 95% CI entirely below zero.
-- Residual coupling beyond death and local-neighbourhood dynamics: χ < 0 in all six conditions under the dynamic local null.
-
-Follow-up mechanism audits further show the slope does not reduce to a per-cell causal rate: exact one-cell deletion recovers only part of the slope, a k-delete ladder rules out collective additivity, controlled regressions yield weak residual signal, and d2_adj local refinement fails to improve stability. The slope is best treated as a stable empirical structural relation whose mechanism remains open. A matched-budget deletion study finds iso-targeted deletion performs worse than random (12/12 conditions) while coarse block-targeted deletion outperforms it (12/12), an anti-alignment consistent with the count indexing world-level structural fragility rather than acting as a causal lever. The relation is also sign-consistent under temporal subsampling at strides m ∈ {1, 2, 4}.
-
-All results are established computationally within GoL. Generalisation beyond this system is an open empirical question.
+Specifically:
+1. **Target-specific selection (GoL: PASS, Global: PASS).** iso_count adds ΔR² ≈ 0.001 for the fine-net target; null ΔR² ≈ −0.002. The response is target-specific, not a density artefact.
+2. **Temporal response law.** β_iso(k) ≈ −0.70 to −0.80 across all tested horizons k ∈ {1,5,10,25,50,100,200}, two rules, two sizes, three density bands. All 112 condition-horizon slopes are negative.
+3. **Mechanism: local component-context loss.** Not simple cell death. Local-window loss CV R² = 0.538 vs iso_count alone = 0.355. The mechanism transfers across density, size, rule, and condition after condition-standardization (fate_all R²_z ≈ 0.545, frac_R2_positive = 1.0).
+4. **Two-layer amplitude structure.** Standardized mechanism is transferable; raw amplitude is predictable from (L, ρ) with LOO R² = 0.977.
+5. **LGDS bridge.** Fine-net horizon tasks are rank-1 coherent (mean |cos| = 0.999); heterogeneous targets are not (mean |cos| = 0.427).
 
 ---
 
 ## Repository structure
 
 ```
-ca.py                  # Simulation engine, all studies, figure/table generation
-paper.tex              # Manuscript (RevTeX 4-2, AIP/Chaos format)
-paper.pdf              # Compiled preprint
-build.sh               # Full build script (runs ca.py then compiles LaTeX)
-test_regression.py     # Regression tests for core computations
-
-outputs/
-  data/                # Simulation data CSVs and stats JSON files
-  figures/             # All paper figures (PDF + PNG)
-  tables/              # Summary tables (CSV)
-  logs/                # Adjudication note (LaTeX aux files are gitignored)
+ca.py                    # Core simulation engine (GoL/HighLife BFS, isolate classifier)
+test_regression.py       # Regression tests for core computations
+scripts/                 # Analysis scripts (moved from root)
+  ca_selection_principle_test.py
+  ca_horizon_response_test.py
+  ca_isolate_fate_mechanism.py
+  ca_isolate_transition_classes.py
+  ca_lgds_bridge_test.py
+  ca_mechanism_transfer_test.py
+  ca_mechanism_transfer_standardized.py
+  ca_mechanism_amplitude_law.py
+  ca_prestate_class_horizon_test.py
+  make_response_law_artifacts.py
+outputs/                 # All simulation outputs (pre-computed)
+  selection_principle/
+  selection_principle_horizon/
+  isolate_fate/
+  isolate_transition_classes/
+  ca_lgds_bridge/
+  mechanism_transfer/
+  mechanism_transfer_standardized/
+  mechanism_amplitude_law/
+  prestate_class_horizon/
+paper/                   # Manuscript
+  paper.tex
+  paper.pdf
+  refs.bib
+  macros.tex
+  build.sh
+  figures/
+  tables/
+paper.pdf                # Root copy of compiled PDF
+build.sh                 # Root build script
 ```
 
 ---
 
-## Reproducing all results
-
-**Requirements:** Python 3.9+ with numpy, pandas, scipy, scikit-learn, matplotlib, seaborn, tqdm; LaTeX with revtex4-2 and latexmk.
+## Reproducing paper artifacts from existing outputs
 
 ```bash
-# Activate environment (adjust path as needed)
-source /path/to/your/venv/bin/activate
-
-# Full rebuild: simulations + figures + compiled PDF
-bash build.sh
+./build.sh
 ```
 
-Running `build.sh` will:
-1. Execute `ca.py`, which runs all four studies (~30–60 minutes depending on hardware).
-2. Write all outputs to `outputs/`.
-3. Compile `paper.tex` with latexmk and copy `paper.pdf` to the project root.
-
-To run only the simulation and inspect outputs without compiling LaTeX:
-```bash
-python ca.py
-```
+This runs `scripts/make_response_law_artifacts.py` (reads outputs/, writes paper/figures/ and paper/tables/) then compiles `paper/paper.tex` to `paper/paper.pdf` and copies it to root.
 
 ---
 
-## Running the tests
+## Rerunning individual analyses
+
+All scripts are in `scripts/` and should be run from the **repo root**:
+
+```bash
+source /path/to/venv/bin/activate
+python scripts/ca_selection_principle_test.py
+python scripts/ca_horizon_response_test.py
+# etc.
+```
+
+Outputs are written to `outputs/<module>/`.
+
+---
+
+## Running tests
 
 ```bash
 pytest test_regression.py -v
 ```
-
-The test suite covers:
-- Periodic (torus) BFS component counting vs non-periodic counting.
-- Embedded and alone cell classification edge cases.
-- Narrative gap computation for known inputs.
-- That all negative controls produce R² < 0.04 (regression against stored data). Note: 4 of the 20 conditions use B=16 static features, which are near-constant at the study densities (all blocks occupied); those conditions pass trivially. Removing them, 0/16 non-trivial conditions exceed the threshold.
-
----
-
-## Key design decisions
-
-### Fine observer: periodic BFS, not `scipy.ndimage.label`
-
-`scipy.ndimage.label` operates on a flat array and cannot detect components that span opposite edges of a toroidal grid. All component counting uses a hand-written BFS that wraps indices modulo the grid dimensions.
-
-### Embedded cell definition
-
-A cell is **embedded** if: (i) it is alive, (ii) all four 4-connected neighbours are dead, (iii) at least one diagonal neighbour is alive. This is a purely structural, contemporaneous criterion — the outcome variable (future component net change) plays no role in the definition.
-
-### Bootstrap resampling unit
-
-In Study A, the resampling unit is the world row (one row = one 250-step simulation). The bootstrap therefore captures sampling variability over the world distribution, not over individual time steps.
-
-### Dynamic local null (Study D)
-
-Each embedded cell's local structural contribution is estimated by a counterfactual: remove the focal cell from the full torus, step both versions one step, and compare 4-connected component counts inside the 5×5 neighbourhood patch centred on the focal site (non-periodic within the patch). The +1.0 offset in `dynamic_local_delta_for_focal` ensures the decomposition β_emp = β_death + β_local + β_residual simplifies to β_residual = β_emp − mean(δ_sync).
-
-### No hyperparameter search
-
-All Ridge regression uses α = 1.0 fixed. No tuning was performed across conditions. The 5-fold CV splits use a fixed seed; all thresholds (CV ≤ 0.20, R² > 0.04) were specified before analysis.
-
----
-
-## Reproducibility notes
-
-- All seeds are stored in the data CSVs; any individual world can be regenerated exactly.
-- Study D uses six separate seeds (BASE_SEED + k for k = 0..5); the per-condition slopes and χ values in Table 6 are exactly reproducible.
-- The bootstrap CIs in Studies A and B are reproducible from the stored seeds (SEED = 20260325 for Study A, 20260326 for Study B).
 
 ---
 
 ## Citation
 
 ```
-Bhatia, K. (2026). Observer Disagreement, Predictive Scale, and a Stable
-Component-Change Law in Conway's Game of Life. Preprint.
-https://github.com/kunalb541/CA
+Bhatia, K. (2026). Embedded Isolates Define a Target-Specific Temporal Response Law
+in Cellular Automata. Preprint. https://github.com/kunalb541/CA
 ```
 
 ---

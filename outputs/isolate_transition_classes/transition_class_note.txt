@@ -1,0 +1,24 @@
+CA Isolate Transition-Class Decomposition
+
+Question: can the one-step isolate response be decomposed by local embedded-isolate classes?
+
+Global in-sample R2 on residual ΔC1:
+  iso_count           : 0.0024
+  diag_class_counts   : 0.0100
+  diag_class_losses   : 0.0158
+  counts_plus_losses  : 0.3912
+
+Top negative class contribution proxies p(class)*mean_local_delta:
+  class=08: p=0.145, mean_delta=-2.015, p*delta=-0.2916
+  class=01: p=0.145, mean_delta=-2.015, p*delta=-0.2915
+  class=04: p=0.145, mean_delta=-2.015, p*delta=-0.2914
+  class=02: p=0.145, mean_delta=-2.014, p*delta=-0.2912
+  class=06: p=0.054, mean_delta=-2.477, p*delta=-0.1341
+  class=09: p=0.054, mean_delta=-2.474, p*delta=-0.1338
+  class=12: p=0.054, mean_delta=-2.271, p*delta=-0.1231
+  class=03: p=0.054, mean_delta=-2.269, p*delta=-0.1229
+
+Interpretation:
+- If class-count/loss models beat iso_count, local transition class structure refines the mechanism.
+- If iso_count remains comparable, the object count is already a near-sufficient summary at this resolution.
+- This is not yet a closed-form derivation; it is an empirical transition-class decomposition.

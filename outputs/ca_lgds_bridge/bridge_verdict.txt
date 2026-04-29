@@ -1,0 +1,27 @@
+CA ↔ LGDS Bridge Test
+
+Interpretation:
+- High cosine / low rank means tasks share an approximate common description direction.
+- Low cosine / high relative regret means no single low-rank description is globally privileged.
+
+selection_multi_target:
+  n_tasks = 7
+  mean pairwise |cos| = 0.427
+  min pairwise |cos| = 0.008
+  rank-1 energy = 0.532
+  rank-2 energy = 0.897
+  mean rank-1 relative regret = 0.596
+  max rank-1 relative regret = 0.957
+
+horizon_fine_net:
+  n_tasks = 7
+  mean pairwise |cos| = 0.999
+  min pairwise |cos| = 0.997
+  rank-1 energy = 0.999
+  rank-2 energy = 1.000
+  mean rank-1 relative regret = 0.001
+  max rank-1 relative regret = 0.002
+
+VERDICT: PASS
+Fine-net horizon tasks are substantially more coherent than heterogeneous targets.
+This supports task-indexed description privilege: one description direction aligns within a target family but not globally across targets.

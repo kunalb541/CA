@@ -1,0 +1,43 @@
+CA Mechanism Amplitude-Law Test
+
+Question: can condition-dependent response amplitude be predicted from rule, L, and rho?
+
+Condition amplitude table summary:
+  fate_all                     mean_amp=33.8979, sd=12.5678, CV=0.371, mean_within_R2_z=0.5557
+  iso_count                    mean_amp=33.6520, sd=12.4276, CV=0.369, mean_within_R2_z=0.3611
+  local_window_delta_loss_gain mean_amp=33.6743, sd=12.4356, CV=0.369, mean_within_R2_z=0.5433
+  local_window_loss            mean_amp=33.6355, sd=12.4211, CV=0.369, mean_within_R2_z=0.5255
+
+Amplitude prediction models:
+  fate_all                     full             R2_LOO=0.9768, corr_LOO=0.989, amp_CV=0.371
+  fate_all                     size_rho         R2_LOO=0.9695, corr_LOO=0.985, amp_CV=0.371
+  fate_all                     rule_size_rho    R2_LOO=0.9629, corr_LOO=0.981, amp_CV=0.371
+  fate_all                     size_only        R2_LOO=0.7961, corr_LOO=0.892, amp_CV=0.371
+  fate_all                     rule_only        R2_LOO=-0.1384, corr_LOO=-1.000, amp_CV=0.371
+  fate_all                     rho_only         R2_LOO=-0.2728, corr_LOO=-0.394, amp_CV=0.371
+  iso_count                    full             R2_LOO=0.9770, corr_LOO=0.989, amp_CV=0.369
+  iso_count                    size_rho         R2_LOO=0.9703, corr_LOO=0.985, amp_CV=0.369
+  iso_count                    rule_size_rho    R2_LOO=0.9638, corr_LOO=0.982, amp_CV=0.369
+  iso_count                    size_only        R2_LOO=0.8023, corr_LOO=0.896, amp_CV=0.369
+  iso_count                    rule_only        R2_LOO=-0.1384, corr_LOO=-1.000, amp_CV=0.369
+  iso_count                    rho_only         R2_LOO=-0.2816, corr_LOO=-0.415, amp_CV=0.369
+  local_window_delta_loss_gain full             R2_LOO=0.9770, corr_LOO=0.989, amp_CV=0.369
+  local_window_delta_loss_gain size_rho         R2_LOO=0.9703, corr_LOO=0.985, amp_CV=0.369
+  local_window_delta_loss_gain rule_size_rho    R2_LOO=0.9638, corr_LOO=0.982, amp_CV=0.369
+  local_window_delta_loss_gain size_only        R2_LOO=0.8024, corr_LOO=0.896, amp_CV=0.369
+  local_window_delta_loss_gain rule_only        R2_LOO=-0.1384, corr_LOO=-1.000, amp_CV=0.369
+  local_window_delta_loss_gain rho_only         R2_LOO=-0.2816, corr_LOO=-0.415, amp_CV=0.369
+  local_window_loss            full             R2_LOO=0.9772, corr_LOO=0.989, amp_CV=0.369
+  local_window_loss            size_rho         R2_LOO=0.9703, corr_LOO=0.985, amp_CV=0.369
+  local_window_loss            rule_size_rho    R2_LOO=0.9638, corr_LOO=0.982, amp_CV=0.369
+  local_window_loss            size_only        R2_LOO=0.8025, corr_LOO=0.896, amp_CV=0.369
+  local_window_loss            rule_only        R2_LOO=-0.1384, corr_LOO=-1.000, amp_CV=0.369
+  local_window_loss            rho_only         R2_LOO=-0.2816, corr_LOO=-0.415, amp_CV=0.369
+
+VERDICT: PASS
+Condition amplitude is substantially predictable from rule/L/rho covariates.
+
+Interpretation:
+The standardized mechanism already transfers. This test asks whether the raw scale factor also obeys a simple law.
+If this passes, ODD gets a two-layer structure: transferable mechanism + predictable condition amplitude.
+If this fails, the mechanism still transfers directionally, but raw amplitude calibration remains open.

@@ -1,0 +1,47 @@
+CA Non-Leaky Prestate Class Horizon Test
+
+Question: do t=0 isolate class counts explain horizon residual response without using t+1 fate/window-loss features?
+
+iso_count:
+  mean R2 over horizons = 0.2411
+  mean shuffle R2 over horizons = 0.0008
+  min R2 over horizons = 0.1752
+    k=  1: R2=0.3611, shuffle=0.0005, frac_pos=1.00
+    k=  5: R2=0.2808, shuffle=0.0015, frac_pos=1.00
+    k= 10: R2=0.2601, shuffle=0.0006, frac_pos=1.00
+    k= 25: R2=0.2265, shuffle=0.0008, frac_pos=1.00
+    k= 50: R2=0.2019, shuffle=0.0010, frac_pos=1.00
+    k=100: R2=0.1824, shuffle=0.0006, frac_pos=1.00
+    k=200: R2=0.1752, shuffle=0.0005, frac_pos=1.00
+
+class_counts:
+  mean R2 over horizons = 0.2576
+  mean shuffle R2 over horizons = 0.0115
+  min R2 over horizons = 0.1906
+    k=  1: R2=0.3837, shuffle=0.0109, frac_pos=1.00
+    k=  5: R2=0.2977, shuffle=0.0117, frac_pos=1.00
+    k= 10: R2=0.2765, shuffle=0.0126, frac_pos=1.00
+    k= 25: R2=0.2425, shuffle=0.0098, frac_pos=1.00
+    k= 50: R2=0.2152, shuffle=0.0116, frac_pos=1.00
+    k=100: R2=0.1968, shuffle=0.0119, frac_pos=1.00
+    k=200: R2=0.1906, shuffle=0.0118, frac_pos=1.00
+
+iso_plus_class_counts:
+  mean R2 over horizons = 0.2568
+  mean shuffle R2 over horizons = 0.0115
+  min R2 over horizons = 0.1891
+    k=  1: R2=0.3832, shuffle=0.0109, frac_pos=1.00
+    k=  5: R2=0.2972, shuffle=0.0119, frac_pos=1.00
+    k= 10: R2=0.2760, shuffle=0.0126, frac_pos=1.00
+    k= 25: R2=0.2419, shuffle=0.0099, frac_pos=1.00
+    k= 50: R2=0.2147, shuffle=0.0117, frac_pos=1.00
+    k=100: R2=0.1958, shuffle=0.0120, frac_pos=1.00
+    k=200: R2=0.1891, shuffle=0.0119, frac_pos=1.00
+
+VERDICT: CHECK/FAIL
+Non-leaky prestate class predictors do not cleanly recover the response.
+
+Interpretation:
+- PASS: local t=0 class structure refines the mechanism.
+- WEAK PASS: object count is the sufficient prestate summary; detailed mechanism uses t+1 event carriers.
+- FAIL: previous mechanism relied too much on outcome-derived features.

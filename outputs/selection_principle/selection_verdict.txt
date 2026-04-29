@@ -1,0 +1,26 @@
+ODD Selection-Principle Test
+Boundary/connectivity convention: periodic torus, 4-connected fine components (repo definition reused).
+Embedded-isolate definition: alive, 4-isolated, at least one diagonal live neighbor (repo definition reused).
+Note: in this repo the fine-net target equals future minus present periodic 4-component count, so `target_fine_net` and `target_delta_components` are numerically identical.
+Note: `TSI_norm` follows the requested literal formula and can be negative if every non-fine target has negative deltaR2_iso.
+
+GoL pooled: PASS
+  fine_net deltaR2_iso = 0.0012 [0.0011, 0.0013]
+  fine_net iso slope = -0.1054 [-0.1333, -0.0768]
+  fine_net null deltaR2 = -0.0000, null slope CI = [-0.0245, 0.0204]
+  TSI = 0.0009, TSI_norm = 4.0583
+  Criteria: c1=True, c2=True, c3=True, c4=True, c5=True, hard_fail=False
+
+HighLife pooled: WEAK PASS
+  fine_net deltaR2_iso = 0.0013 [0.0011, 0.0014]
+  fine_net iso slope = -0.1020 [-0.1343, -0.0690]
+  fine_net null deltaR2 = -0.0000, null slope CI = [-0.0362, 0.0149]
+  TSI = 0.0005, TSI_norm = 1.7477
+  Criteria: c1=True, c2=True, c3=False, c4=True, c5=True, hard_fail=False
+
+Global pooled: PASS
+  fine_net deltaR2_iso = 0.0012 [0.0011, 0.0013]
+  fine_net iso slope = -0.1035 [-0.1253, -0.0832]
+  fine_net null deltaR2 = -0.0000, null slope CI = [-0.0248, 0.0091]
+  TSI = 0.0006, TSI_norm = 2.0529
+  Criteria: c1=True, c2=True, c3=True, c4=True, c5=True, hard_fail=False

@@ -1,0 +1,14 @@
+CA Horizon Target-Shuffle Null Check
+
+Question: does the horizon residual response survive target shuffling?
+
+k=  1: real_R2=0.3611, iso_shuffle_R2=0.0021, target_shuffle_R2=0.0010, real_slope=-0.7979, target_shuffle_slope=0.0024, frac_real_CI_neg=1.00, frac_target_shuffle_CI_neg=0.00
+k=  5: real_R2=0.2808, iso_shuffle_R2=0.0008, target_shuffle_R2=0.0013, real_slope=-0.7102, target_shuffle_slope=0.0112, frac_real_CI_neg=1.00, frac_target_shuffle_CI_neg=0.00
+k= 10: real_R2=0.2601, iso_shuffle_R2=0.0009, target_shuffle_R2=0.0016, real_slope=-0.7121, target_shuffle_slope=0.0041, frac_real_CI_neg=1.00, frac_target_shuffle_CI_neg=0.00
+k= 25: real_R2=0.2265, iso_shuffle_R2=0.0008, target_shuffle_R2=0.0003, real_slope=-0.7029, target_shuffle_slope=0.0063, frac_real_CI_neg=1.00, frac_target_shuffle_CI_neg=0.00
+k= 50: real_R2=0.2019, iso_shuffle_R2=0.0014, target_shuffle_R2=0.0008, real_slope=-0.6994, target_shuffle_slope=0.0068, frac_real_CI_neg=1.00, frac_target_shuffle_CI_neg=0.00
+k=100: real_R2=0.1824, iso_shuffle_R2=0.0009, target_shuffle_R2=0.0009, real_slope=-0.7009, target_shuffle_slope=-0.0005, frac_real_CI_neg=1.00, frac_target_shuffle_CI_neg=0.00
+k=200: real_R2=0.1752, iso_shuffle_R2=0.0007, target_shuffle_R2=0.0006, real_slope=-0.7088, target_shuffle_slope=0.0104, frac_real_CI_neg=1.00, frac_target_shuffle_CI_neg=0.00
+
+VERDICT: PASS
+Target-shuffle and iso-shuffle nulls remain near zero while real residual response is nonzero.

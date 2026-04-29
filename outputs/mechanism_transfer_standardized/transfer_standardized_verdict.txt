@@ -1,0 +1,48 @@
+CA Mechanism Transfer Test — Condition-Standardized
+
+All targets and mechanism features are z-scored within condition before transfer.
+This tests directional/mechanism transport after removing size/amplitude calibration.
+
+
+leave_density:
+  local_window_delta_loss_gain mean_R2_z=0.5416, median_R2_z=0.5433, min_R2_z=0.5189, frac_R2_pos=1.00, mean_corr_z=0.736
+  fate_all                     mean_R2_z=0.5398, median_R2_z=0.5409, min_R2_z=0.5123, frac_R2_pos=1.00, mean_corr_z=0.735
+  local_window_loss            mean_R2_z=0.5251, median_R2_z=0.5233, min_R2_z=0.5059, frac_R2_pos=1.00, mean_corr_z=0.725
+  class_counts_plus_losses     mean_R2_z=0.5177, median_R2_z=0.5176, min_R2_z=0.4845, frac_R2_pos=1.00, mean_corr_z=0.720
+  class_losses                 mean_R2_z=0.5142, median_R2_z=0.5137, min_R2_z=0.4809, frac_R2_pos=1.00, mean_corr_z=0.717
+  fate_core                    mean_R2_z=0.4102, median_R2_z=0.4290, min_R2_z=0.3284, frac_R2_pos=1.00, mean_corr_z=0.642
+  iso_count                    mean_R2_z=0.3603, median_R2_z=0.3666, min_R2_z=0.3301, frac_R2_pos=1.00, mean_corr_z=0.600
+  class_counts                 mean_R2_z=0.3513, median_R2_z=0.3662, min_R2_z=0.2847, frac_R2_pos=1.00, mean_corr_z=0.596
+
+leave_size:
+  fate_all                     mean_R2_z=0.5455, median_R2_z=0.5455, min_R2_z=0.5394, frac_R2_pos=1.00, mean_corr_z=0.739
+  local_window_delta_loss_gain mean_R2_z=0.5424, median_R2_z=0.5424, min_R2_z=0.5358, frac_R2_pos=1.00, mean_corr_z=0.737
+  local_window_loss            mean_R2_z=0.5252, median_R2_z=0.5252, min_R2_z=0.5178, frac_R2_pos=1.00, mean_corr_z=0.725
+  class_counts_plus_losses     mean_R2_z=0.5250, median_R2_z=0.5250, min_R2_z=0.5184, frac_R2_pos=1.00, mean_corr_z=0.725
+  class_losses                 mean_R2_z=0.5203, median_R2_z=0.5203, min_R2_z=0.5132, frac_R2_pos=1.00, mean_corr_z=0.722
+  fate_core                    mean_R2_z=0.4190, median_R2_z=0.4190, min_R2_z=0.4115, frac_R2_pos=1.00, mean_corr_z=0.647
+  iso_count                    mean_R2_z=0.3603, median_R2_z=0.3603, min_R2_z=0.3496, frac_R2_pos=1.00, mean_corr_z=0.600
+  class_counts                 mean_R2_z=0.3595, median_R2_z=0.3595, min_R2_z=0.3470, frac_R2_pos=1.00, mean_corr_z=0.600
+
+leave_rule:
+  fate_all                     mean_R2_z=0.5456, median_R2_z=0.5456, min_R2_z=0.5436, frac_R2_pos=1.00, mean_corr_z=0.739
+  local_window_delta_loss_gain mean_R2_z=0.5424, median_R2_z=0.5424, min_R2_z=0.5407, frac_R2_pos=1.00, mean_corr_z=0.736
+  class_counts_plus_losses     mean_R2_z=0.5263, median_R2_z=0.5263, min_R2_z=0.5242, frac_R2_pos=1.00, mean_corr_z=0.726
+  local_window_loss            mean_R2_z=0.5252, median_R2_z=0.5252, min_R2_z=0.5230, frac_R2_pos=1.00, mean_corr_z=0.725
+  class_losses                 mean_R2_z=0.5206, median_R2_z=0.5206, min_R2_z=0.5177, frac_R2_pos=1.00, mean_corr_z=0.722
+  fate_core                    mean_R2_z=0.4187, median_R2_z=0.4187, min_R2_z=0.4153, frac_R2_pos=1.00, mean_corr_z=0.647
+  iso_count                    mean_R2_z=0.3605, median_R2_z=0.3605, min_R2_z=0.3549, frac_R2_pos=1.00, mean_corr_z=0.600
+  class_counts                 mean_R2_z=0.3600, median_R2_z=0.3600, min_R2_z=0.3584, frac_R2_pos=1.00, mean_corr_z=0.600
+
+leave_condition:
+  fate_all                     mean_R2_z=0.5449, median_R2_z=0.5448, min_R2_z=0.4971, frac_R2_pos=1.00, mean_corr_z=0.738
+  local_window_delta_loss_gain mean_R2_z=0.5423, median_R2_z=0.5370, min_R2_z=0.5052, frac_R2_pos=1.00, mean_corr_z=0.737
+  class_counts_plus_losses     mean_R2_z=0.5256, median_R2_z=0.5278, min_R2_z=0.4734, frac_R2_pos=1.00, mean_corr_z=0.725
+  local_window_loss            mean_R2_z=0.5252, median_R2_z=0.5215, min_R2_z=0.4802, frac_R2_pos=1.00, mean_corr_z=0.725
+  class_losses                 mean_R2_z=0.5200, median_R2_z=0.5225, min_R2_z=0.4591, frac_R2_pos=1.00, mean_corr_z=0.721
+  fate_core                    mean_R2_z=0.4177, median_R2_z=0.4330, min_R2_z=0.3117, frac_R2_pos=1.00, mean_corr_z=0.647
+  iso_count                    mean_R2_z=0.3604, median_R2_z=0.3641, min_R2_z=0.3053, frac_R2_pos=1.00, mean_corr_z=0.600
+  class_counts                 mean_R2_z=0.3591, median_R2_z=0.3682, min_R2_z=0.2602, frac_R2_pos=1.00, mean_corr_z=0.601
+
+VERDICT: PASS
+After condition-standardization, mechanism representations transfer across density, size, rule, and condition.

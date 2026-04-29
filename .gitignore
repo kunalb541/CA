@@ -34,6 +34,8 @@ venv/
 
 # Project-specific: keep PDF outputs but not per-run logs
 outputs/logs/
+# Large raw simulation files (>100 MB — exceeds GitHub's file size limit)
+outputs/isolate_transition_classes/transition_isolate_raw.csv
 
 # Claude memory
 .claude/

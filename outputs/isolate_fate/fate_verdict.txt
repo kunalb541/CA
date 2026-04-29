@@ -1,0 +1,39 @@
+CA Isolate Fate Mechanism Decomposition
+
+Question: what one-step local events carry the embedded-isolate residual ΔC1 response?
+
+Global CV R2 on residual ΔC1:
+  iso_count         : 0.3546
+  death             : 0.1404
+  survive           : 0.2447
+  survive_split     : 0.3212
+  birth_bridge      : 0.3725
+  local_window      : 0.5380
+  cell_fates_all    : 0.4291
+  all_fates         : 0.5454
+  coarse            : 0.0045
+  entropy           : 0.0011
+  all_plus_coarse   : 0.5473
+
+Global single-feature slopes:
+  iso_count                     : slope=-0.7979, frac_CI_neg=1.00, frac_CI_pos=0.00, in_sample_R2=0.3611
+  iso_die                       : slope=-0.7225, frac_CI_neg=1.00, frac_CI_pos=0.00, in_sample_R2=0.1482
+  iso_survive                   : slope=-0.9716, frac_CI_neg=1.00, frac_CI_pos=0.00, in_sample_R2=0.2525
+  iso_survive_isolated          : slope=0.3882, frac_CI_neg=0.00, frac_CI_pos=0.56, in_sample_R2=0.0059
+  iso_survive_connected         : slope=-1.1854, frac_CI_neg=1.00, frac_CI_pos=0.00, in_sample_R2=0.3216
+  iso_orth_birth_any            : slope=-0.8581, frac_CI_neg=1.00, frac_CI_pos=0.00, in_sample_R2=0.3755
+  iso_diag_birth_any            : slope=-0.8917, frac_CI_neg=1.00, frac_CI_pos=0.00, in_sample_R2=0.2485
+  iso_local_window_delta_sum    : slope=0.2757, frac_CI_neg=0.00, frac_CI_pos=1.00, in_sample_R2=0.5355
+  iso_local_window_loss_sum     : slope=-0.2762, frac_CI_neg=1.00, frac_CI_pos=0.00, in_sample_R2=0.5255
+  iso_local_window_gain_sum     : slope=1.2490, frac_CI_neg=0.00, frac_CI_pos=1.00, in_sample_R2=0.0481
+  block_var                     : slope=10510.7631, frac_CI_neg=0.00, frac_CI_pos=0.94, in_sample_R2=0.0130
+  block_entropy                 : slope=37.4300, frac_CI_neg=0.00, frac_CI_pos=0.75, in_sample_R2=0.0095
+
+VERDICT: PASS
+Detailed fate features improve over iso_count and dominate coarse/entropy baselines.
+
+Interpretation guide:
+- PASS means one-step fate decomposition identifies event carriers.
+- WEAK PASS means embedded-isolate count is already the sufficient object-level mechanism summary.
+- LOCAL WINDOW PASS means mechanism is local component-context rather than simple cell fate.
+- FAIL/CHECK means the residual response may be multi-step or nonlocal.

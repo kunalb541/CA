@@ -1,0 +1,53 @@
+CA Mechanism Transfer Test
+
+Question: do isolate/fate/class mechanisms transfer across held-out density, size, rule, and condition?
+
+Summary by split/model:
+
+leave_density:
+  fate_all                     mean_R2=0.3795, median_R2=0.3892, min_R2=0.3190, frac_R2_pos=1.00, mean_corr=0.625
+  class_counts_plus_losses     mean_R2=0.3774, median_R2=0.3809, min_R2=0.3358, frac_R2_pos=1.00, mean_corr=0.621
+  local_window_loss            mean_R2=0.0082, median_R2=0.0084, min_R2=0.0069, frac_R2_pos=1.00, mean_corr=0.094
+  fate_core                    mean_R2=0.0070, median_R2=0.0101, min_R2=-0.0207, frac_R2_pos=0.75, mean_corr=0.168
+  iso_count                    mean_R2=0.0024, median_R2=0.0024, min_R2=0.0023, frac_R2_pos=1.00, mean_corr=0.050
+  class_counts                 mean_R2=-0.0067, median_R2=0.0060, min_R2=-0.0481, frac_R2_pos=0.75, mean_corr=0.088
+  class_losses                 mean_R2=-0.0079, median_R2=0.0128, min_R2=-0.0739, frac_R2_pos=0.75, mean_corr=0.119
+  local_window_delta_loss_gain mean_R2=-0.0415, median_R2=0.0163, min_R2=-0.2663, frac_R2_pos=0.50, mean_corr=0.299
+
+leave_size:
+  class_counts_plus_losses     mean_R2=-44.8886, median_R2=-44.8886, min_R2=-52.7348, frac_R2_pos=0.00, mean_corr=0.675
+  fate_all                     mean_R2=-44.9273, median_R2=-44.9273, min_R2=-52.8279, frac_R2_pos=0.00, mean_corr=0.671
+  iso_count                    mean_R2=-73.5391, median_R2=-73.5391, min_R2=-76.4596, frac_R2_pos=0.00, mean_corr=0.444
+  class_counts                 mean_R2=-85.0129, median_R2=-85.0129, min_R2=-97.4352, frac_R2_pos=0.00, mean_corr=0.446
+  local_window_delta_loss_gain mean_R2=-89.9872, median_R2=-89.9872, min_R2=-123.3242, frac_R2_pos=0.00, mean_corr=0.643
+  local_window_loss            mean_R2=-96.7557, median_R2=-96.7557, min_R2=-130.8189, frac_R2_pos=0.00, mean_corr=0.636
+  class_losses                 mean_R2=-99.8059, median_R2=-99.8059, min_R2=-137.1600, frac_R2_pos=0.00, mean_corr=0.635
+  fate_core                    mean_R2=-119.7167, median_R2=-119.7167, min_R2=-156.6157, frac_R2_pos=0.00, mean_corr=0.506
+
+leave_rule:
+  fate_all                     mean_R2=0.3958, median_R2=0.3958, min_R2=0.3874, frac_R2_pos=1.00, mean_corr=0.630
+  class_counts_plus_losses     mean_R2=0.3840, median_R2=0.3840, min_R2=0.3746, frac_R2_pos=1.00, mean_corr=0.620
+  local_window_delta_loss_gain mean_R2=0.0493, median_R2=0.0493, min_R2=0.0448, frac_R2_pos=1.00, mean_corr=0.225
+  fate_core                    mean_R2=0.0262, median_R2=0.0262, min_R2=0.0248, frac_R2_pos=1.00, mean_corr=0.162
+  class_losses                 mean_R2=0.0132, median_R2=0.0132, min_R2=0.0118, frac_R2_pos=1.00, mean_corr=0.116
+  local_window_loss            mean_R2=0.0086, median_R2=0.0086, min_R2=0.0084, frac_R2_pos=1.00, mean_corr=0.093
+  class_counts                 mean_R2=0.0070, median_R2=0.0070, min_R2=0.0064, frac_R2_pos=1.00, mean_corr=0.085
+  iso_count                    mean_R2=0.0024, median_R2=0.0024, min_R2=0.0024, frac_R2_pos=1.00, mean_corr=0.049
+
+leave_condition:
+  fate_all                     mean_R2=0.3907, median_R2=0.3963, min_R2=0.3075, frac_R2_pos=1.00, mean_corr=0.629
+  class_counts_plus_losses     mean_R2=0.3794, median_R2=0.3859, min_R2=0.3032, frac_R2_pos=1.00, mean_corr=0.621
+  local_window_delta_loss_gain mean_R2=0.0357, median_R2=0.0560, min_R2=-0.1380, frac_R2_pos=0.88, mean_corr=0.478
+  fate_core                    mean_R2=0.0193, median_R2=0.0172, min_R2=-0.0001, frac_R2_pos=0.94, mean_corr=0.192
+  class_counts                 mean_R2=0.0039, median_R2=0.0078, min_R2=-0.0198, frac_R2_pos=0.75, mean_corr=0.141
+  class_losses                 mean_R2=0.0025, median_R2=0.0116, min_R2=-0.0633, frac_R2_pos=0.81, mean_corr=0.324
+  local_window_loss            mean_R2=0.0005, median_R2=0.0036, min_R2=-0.0263, frac_R2_pos=0.50, mean_corr=0.725
+  iso_count                    mean_R2=0.0003, median_R2=0.0009, min_R2=-0.0071, frac_R2_pos=0.50, mean_corr=0.600
+
+VERDICT: FAIL/CHECK
+Transfer is not consistently positive across split types.
+
+Interpretation guide:
+- PASS: mechanism travels across held-out regimes.
+- WEAK PASS: robust object count transfers, detailed mechanism may overfit.
+- FAIL/CHECK: within-condition mechanism may not transport.
