@@ -19,6 +19,7 @@ venv/
 *.blg
 *.nav
 *.snm
+*Notes.bib
 
 # macOS
 .DS_Store
