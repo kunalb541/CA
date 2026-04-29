@@ -18,7 +18,7 @@
 
 \begin{document}
 
-\title{Embedded Isolates Predict Fine-Component Loss in Life-Like Cellular Automata}
+\title{Embedded Isolates Predict Fine-Component Loss in Game of Life and HighLife}
 
 \author{Kunal Bhatia}
 \affiliation{Independent Researcher, Heidelberg, Germany}
@@ -94,7 +94,7 @@ isolated, diagonally tethered, they are the most fragile local connectivity
 nodes in the grid.
 When they die or merge, the fine-component count decreases by one.
 The iso\_count statistic measures how many such fragile nodes are present
-at $t=0$ and, as this paper shows, is sufficient to predict the aggregate
+at $t=0$ and, as this paper shows, is compact enough to predict the aggregate
 fine-net change at every tested horizon.
 Earlier observer-scale diagnostics from the same research program motivated
 this target-specific analysis; they are documented in the public repository.
@@ -147,17 +147,35 @@ We test $k \in \{1, 5, 10, 25, 50, 100, 200\}$, yielding
 $7\text{ horizons} \times 16\text{ conditions} = 112$ condition-horizon
 slope estimates.
 
-The residual slope $\biso$ is estimated by ordinary least squares with
-$N_{\rm live}(0)$ (live-cell count, proportional to density) as a
-nuisance covariate, so that iso\_count is evaluated for its
+The residual slope $\biso$ is estimated by ordinary least squares (OLS)
+with $N_{\rm live}(0)$ (total live-cell count, proportional to $\rho$)
+as a nuisance covariate, so that iso\_count is evaluated for its
 density-orthogonal contribution.
-$R^2$ values for mechanism features are cross-validated (5-fold).
-Slope confidence intervals are obtained by resampling worlds within
-conditions (500 bootstrap draws), not from parametric OLS standard
-errors, so that no homoskedasticity assumption is required across the
-1000-world batteries.
+This and all horizon-response regressions are fitted \emph{condition-wise}
+(within each of the 16 batteries independently); the global
+$\bar\beta_\iso$ reported in the text is the mean across conditions.
+Shuffle-null analyses (iso-count label permutation or target permutation)
+are also run within condition.
+Mechanism $R^2$ values are 5-fold cross-validated within condition.
+Slope confidence intervals use world-resampling bootstrap ($\geq 300$
+draws per condition) rather than parametric OLS standard errors.
 Each initial grid is drawn independently, making worlds the natural
 bootstrap unit.
+
+We use four distinct $R^2$ quantities throughout and distinguish them as
+follows.
+(a)~\emph{Ordinary $R^2$}: variance explained by an OLS model with no
+cross-validation; used for prestate fits.
+(b)~\emph{Residual $R^2$}: $R^2$ of iso\_count after the density
+covariate has been projected out; this is the within-condition prestate
+$R^2$ reported in Section~\ref{sec:selection} and Table~\ref{tab:horizon}.
+(c)~\emph{Cross-validated $R^2$} (5-fold, within condition): used for
+mechanism features in Section~\ref{sec:mechanism}.
+(d)~\emph{$\Delta R^2$}: the difference $R^2(\text{density + predictor})
+- R^2(\text{density only})$; used in the target-selection screen
+(Section~\ref{sec:selection}) to measure incremental lift over the
+density baseline.
+
 All results are scoped to these two Life-like rules on periodic tori
 with $L\in\{64,128\}$ and $\rho\in\{0.20,0.25,0.30,0.35\}$.
 Low-density dynamics ($\rho\lesssim 0.10$), other Life-like rules, and
@@ -189,6 +207,21 @@ block-entropy, or coarse-component targets: the uplift is concentrated
 on the fine-net target only.
 This specificity rules out explanations based purely on total alive-cell
 count or generic spatial statistics.
+
+\textit{Two distinct $R^2$ quantities.}
+$\Delta R^2 = \finenetDeltaRtwo$ and the prestate $R^2 \approx \prestateIsoMean$
+reported in the next subsection answer different questions and should not
+be compared directly.
+The $\Delta R^2$ screen asks whether iso\_count adds \emph{selective}
+information beyond the live-cell-count baseline \emph{across multiple
+targets simultaneously}; because the baseline already absorbs most of the
+pooled variation, the incremental lift is numerically small by construction.
+The prestate $R^2$ evaluates the density-residualised fine-component target
+directly within each condition--horizon battery: how much of the
+remaining variation does $t=0$ iso\_count explain?
+That is the main effect-size estimate---iso\_count accounts for roughly
+$\prestateIsoMean$ of residual fine-component-change variation on average
+across horizons, falling no lower than $\prestateIsoMin$ at $k=200$.
 
 %------------------------------------------------------------
 \begin{figure}[htbp]
@@ -331,6 +364,24 @@ Having established \emph{that} iso\_count predicts fine-component change,
 we turn to \emph{how} this occurs---what actually happens at $t \to t+1$ when embedded
 isolates reduce the future component count?
 
+\textit{One-step transition taxonomy.}
+At the one-step level, each embedded isolate can affect local component count
+via four transition types:
+(i)~\emph{focal death}: the isolate cell dies, removing a local
+connectivity node;
+(ii)~\emph{survival-connected merger}: the cell survives and fuses with
+an adjacent component, absorbing an independent fine component and reducing
+the count by one;
+(iii)~\emph{birth-mediated bridge}: a newly born neighbour cell connects
+the isolate to another component; and
+(iv)~\emph{local gain/fragmentation}: births around the isolate create
+new independent components, partially offsetting the loss.
+Type~(i) is partially analytic: for single-diagonal isolates the focal
+cell has exactly one live Moore-neighbour, so it dies under $S_{23}$
+regardless of surrounding context (see below).
+Types~(ii)--(iv) depend on the surrounding $5\times 5$ neighbourhood
+configuration and are measured empirically.
+
 We decompose iso\_count into one-step outcome categories:
 death, survival, survival-connected (merges with a larger component),
 or triggering births at orthogonal or diagonal sites.
@@ -451,12 +502,18 @@ conditions predicts the held-out condition well.
 \label{sec:amplitude}
 
 Condition amplitudes (raw residual slopes) vary substantially
-(amplitude CV $= \ampCV$) but are predictable from $(L, \rho)$.
-LOO $R^2$: full model $= \ampLOOfull$; size$+\rho$ model
-$= \ampLOOsizerho$; size-only $\approx \ampLOOsizeonly$;
-rule-only $= \ampLOOruleonly$.
-Grid size $L$ is the dominant predictor of amplitude;
-rule identity and density alone do not determine it.
+(amplitude CV $= \ampCV$) but are predictable from grid size and density.
+The parsimonious size$+\rho$ model---two predictors, centred $\log_2 L$
+and centred $\rho$---achieves LOO $R^2 = \ampLOOsizerho$ on the
+16 condition-level amplitudes.
+The full model (six predictors: centred $\log_2 L$, centred $\rho$,
+rule indicator, and three cross-terms) adds only marginal gain
+(LOO $R^2 = \ampLOOfull$).
+Size-only gives LOO $R^2 \approx \ampLOOsizeonly$; rule-only gives
+$\ampLOOruleonly$, confirming that grid size $L$ is the dominant predictor
+and rule identity alone is not.
+Because the model is fit at the 16-condition level, these calibration results
+should be read as within-grid evidence rather than a universal scaling law.
 
 The raw response thus decomposes as:
 \begin{equation}
@@ -466,12 +523,12 @@ The raw response thus decomposes as:
   \label{eq:two_layer}
 \end{equation}
 where $\biso,z \approx -0.50$ is the transferable standardised slope
-and $A(L,\rho)$ is a condition amplitude predictable with
-LOO $R^2 \approx \ampLOOfull$.
+and $A(L,\rho)$ is a condition amplitude calibrated from $(L,\rho)$
+with LOO $R^2 = \ampLOOsizerho$ for the two-predictor model.
 The natural explanation is that $L$ sets the number of components and
-hence the denominator of the relative change $\Ck/C(0)$, while
-$\rho$ controls the density of the specific structural class; together
-they set the amplitude scale that multiplies the universal
+hence the scale of fine-component change, while
+$\rho$ controls the density of the structural class; together
+they set the amplitude scale that multiplies the transferable
 standardised direction.
 
 \begin{figure}[htbp]
@@ -571,6 +628,13 @@ results~\cite{israeli2004}: we predict one low-dimensional target statistic
 The partial predictability shown here is consistent with computational
 irreducibility; it concerns a specific chosen observable, not global
 state reconstruction.
+The novelty lies in combining four elements simultaneously: a single
+interpretable hand-defined structural object that (i) gives target-specific
+prediction with exact one-step fate for the single-diagonal subclass,
+(ii) decomposes into an analytically grounded mechanism,
+(iii) transfers across held-out conditions after standardisation, and
+(iv) admits amplitude calibration from $(L,\rho)$---all for future
+fine-component loss in two well-studied Life-like rules.
 
 \textit{Embedded isolates as objects.}
 Embedded isolated cells form a well-defined structural class at the topological
@@ -589,7 +653,7 @@ not a simple density proxy.
 \label{sec:conclusion}
 %------------------------------------------------------------
 
-The count of embedded isolated cells is the sufficient non-leaky prestate
+The count of embedded isolated cells is a compact, non-leaky prestate
 predictor of future fine-component change in Conway's Game of Life
 and HighLife.
 The $t=0$ count alone explains a substantial fraction of residual

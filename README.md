@@ -50,7 +50,7 @@ outputs/                 # All simulation outputs (pre-computed)
     fig4_studyB_r2_vs_B_source.csv
     fig6_studyD_slope_summary_source.csv
 paper/                   # Manuscript sources
-  paper.tex              # Lean journal version (16 pages)
+  paper.tex              # Lean journal version (17 pages)
   paper.pdf
   paper_full_preprint.tex  # Full preprint (20 pages; adds background appendix)
   paper_full_preprint.pdf
@@ -69,7 +69,7 @@ build.sh                 # Root build script
 
 ## Paper structure
 
-### Lean journal version — `paper.pdf` (16 pages)
+### Lean journal version — `paper.pdf` (17 pages)
 
 | Section | Content |
 |---------|---------|
@@ -112,7 +112,7 @@ for reproducibility; included in `paper_full_preprint.pdf` only.
 This runs `scripts/make_response_law_artifacts.py` (reads `outputs/`, writes
 `paper/figures/` — 8 flagship + 4 background lineage figures — and `paper/tables/`),
 then compiles both `paper.tex` and `paper_full_preprint.tex`, producing
-`paper/paper.pdf` (16 pages), `paper/paper_full_preprint.pdf` (20 pages),
+`paper/paper.pdf` (17 pages), `paper/paper_full_preprint.pdf` (21 pages),
 and root copies of both.
 
 No simulations are re-run. All pre-computed outputs are committed to `outputs/`.
