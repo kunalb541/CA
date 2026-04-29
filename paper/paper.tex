@@ -182,7 +182,7 @@ target-shuffle null) we measure $\Delta R^2 = R^2(\text{density + predictor})
 are numerically identical in this codebase and one is omitted from the plot).
 
 For iso\_count on the fine-net target, the global pooled result is
-$\Delta R^2 = \finenetDeltaRtwo$ (GoL: \golSelVerdict; global: PASS).
+$\Delta R^2 = \finenetDeltaRtwo$ (GoL: \golSelVerdict; HighLife: WEAK PASS; global: PASS).
 The iso-shuffle and target-shuffle incremental nulls are near zero
 ($\Delta R^2 < 0.001$ for both), confirming the signal is not an
 artefact of the density-count correlation.
@@ -352,7 +352,7 @@ $k$ & $\bar\beta_\iso$ & CV & $\bar R^2$ & Null $R^2$ & $n_{\rm cond}$ \\
 %------------------------------------------------------------
 
 Having established \emph{that} iso\_count predicts fine-component change,
-we ask \emph{how}: what actually happens at $t \to t+1$ when embedded
+we turn to \emph{how} this occurs---what actually happens at $t \to t+1$ when embedded
 isolates reduce the future component count?
 
 We decompose iso\_count into one-step outcome categories:

@@ -241,15 +241,17 @@ def make_fig1(ROOT):
                    loc="left", fontsize=10, pad=4)
     ax_b.legend(loc="upper right", fontsize=7.5, ncol=2)
 
-    # Annotate the fine-net iso bar with value
-    ax_b.annotate(f"$\\Delta R^2={iso_vals[0]:.4f}$\n(fine-net only)",
-                  xy=(x[0] - 1.5*w, iso_vals[0]),
-                  xytext=(x[0] + 0.65, iso_vals[0] + 0.00018),
-                  arrowprops=dict(arrowstyle="->", color=BLUE, lw=0.9),
-                  fontsize=7.5, va="bottom", ha="left", color=BLUE)
-    # Annotate null near zero
-    ax_b.text(x[0] + 1.5*w, 0.00004,
-              "null $\\approx 0$", ha="center", va="bottom",
+    # Annotate iso fine-net bar: arrow comes down from a clearly visible text position
+    fine_bar_x = x[0] - 1.5*w
+    ax_b.annotate(f"iso: $\\Delta R^2 = {iso_vals[0]:.4f}$",
+                  xy=(fine_bar_x, iso_vals[0]),
+                  xytext=(fine_bar_x + 0.05, max(iso_vals) * 0.35),
+                  arrowprops=dict(arrowstyle="->", color=BLUE, lw=0.9,
+                                  connectionstyle="arc3,rad=-0.25"),
+                  fontsize=7.5, va="center", ha="left", color=BLUE)
+    # Null note: placed to right of the null bar, well below the iso annotation
+    ax_b.text(x[0] + 1.5*w + 0.15, iso_vals[0] * 0.8,
+              "null $\\approx 0$", ha="left", va="center",
               fontsize=7, color="#888888", style="italic")
 
     _savefig(fig, "fig1_object_selection.pdf")
@@ -360,7 +362,7 @@ def make_fig3(ROOT):
     ax_a.set_xlabel("Horizon $k$")
     ax_a.set_ylabel("Mean $\\hat{\\beta}_{\\rm iso}(k)$")
     ax_a.set_title("(a)  Response slope vs horizon", loc="left", fontsize=10)
-    ax_a.legend(loc="lower right", fontsize=7.5)
+    ax_a.legend(loc="upper left", fontsize=7.5)   # slopes cluster near −0.7; top is white space
     ax_a.set_ylim(top=0.05)
 
     # ----- (b) R² -----
@@ -473,8 +475,8 @@ def make_fig5(ROOT):
         "slope_iso_count":               "iso count",
         "slope_iso_die":                 "iso die",
         "slope_iso_survive":             "iso survive",
-        "slope_iso_survive_connected":   "survive connected",
-        "slope_iso_survive_isolated":    "survive isolated",
+        "slope_iso_survive_connected":   "surv. connected",   # shortened to avoid label overlap
+        "slope_iso_survive_isolated":    "surv. isolated",
         "slope_iso_orth_birth_any":      "orth birth",
         "slope_iso_diag_birth_any":      "diag birth",
         "slope_iso_local_window_loss_sum": "window loss",
@@ -539,10 +541,16 @@ def make_fig5(ROOT):
     ax_b.set_xlabel("Mean slope $\\hat{\\beta}$")
     ax_b.set_title("(b)  Single-feature slopes", loc="left", fontsize=10)
     ax_b.axvline(0, color=BLACK, linewidth=0.8)
+    # Place numeric labels INSIDE bars near right edge (away from y-tick labels)
     for i, v in enumerate(svals):
-        xtext = v + 0.03 if v >= 0 else v - 0.05
-        ax_b.text(xtext, yb[i], f"{v:.2f}", va="center", fontsize=7.5,
-                  ha="left" if v >= 0 else "right", color=BLACK)
+        if v >= 0:
+            ax_b.text(v + 0.04, yb[i], f"{v:.2f}", va="center", fontsize=7.5,
+                      ha="left", color=BLACK)
+        else:
+            # Place just right of the bar tip (inside bar, white text for readability)
+            xtext = v + 0.07  # inside the bar
+            ax_b.text(xtext, yb[i], f"{v:.2f}", va="center", fontsize=7.5,
+                      ha="left", color="white", fontweight="bold")
 
     _savefig(fig, "fig5_mechanism.pdf")
     _savefig(fig, "fig5_mechanism.png")
