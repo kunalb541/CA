@@ -6,10 +6,16 @@ cd "$SCRIPT_DIR"
 echo "=== Generating paper artifacts ==="
 python ../scripts/make_response_law_artifacts.py
 
-echo "=== Compiling paper ==="
+echo "=== Compiling lean journal version (paper.tex) ==="
 pdflatex -interaction=nonstopmode paper.tex
 bibtex paper || true
 pdflatex -interaction=nonstopmode paper.tex
 pdflatex -interaction=nonstopmode paper.tex
 
-echo "=== Done: paper/paper.pdf ==="
+echo "=== Compiling full preprint (paper_full_preprint.tex) ==="
+pdflatex -interaction=nonstopmode paper_full_preprint.tex
+bibtex paper_full_preprint || true
+pdflatex -interaction=nonstopmode paper_full_preprint.tex
+pdflatex -interaction=nonstopmode paper_full_preprint.tex
+
+echo "=== Done: paper/paper.pdf  paper/paper_full_preprint.pdf ==="

@@ -576,12 +576,28 @@ def make_fig6(ROOT):
     tc_all = tc.sort_values("p_times_delta", ascending=True)
     yc     = np.arange(len(tc_all))
     pd_vals = tc_all["p_times_delta"].values
+    # Diagonal-adjacency class: bit pattern NW=1, NE=2, SW=4, SE=8.
+    # Count of set bits = number of diagonal live neighbours.
+    # Single-diagonal: classes 1,2,4,8  (one bit set)
+    # Two-diagonal:    classes 3,5,6,9,10,12  (two bits set)
+    # Three-diagonal:  classes 7,11,13,14  (three bits set)
+    # Four-diagonal:   class 15  (four bits set)
     class_desc = {
-        1: "1 diag nbr",  2: "2 diag (opp)",  3: "2 diag (adj)",
-        4: "2 diag (opp2)", 5: "3 diag nbr",  6: "2 adj diag",
-        7: "3 diag+1",  8: "all 4 diag",  9: "corner adj",
-        10: "corner+opp", 11: "3+sym", 12: "L-shape",
-        13: "broad", 14: "complex", 15: "full ring",
+        1:  "single (NW)",
+        2:  "single (NE)",
+        3:  "two (NW+NE)",
+        4:  "single (SW)",
+        5:  "two (NW+SW)",
+        6:  "two (NE+SW)",
+        7:  "three (NW+NE+SW)",
+        8:  "single (SE)",
+        9:  "two (NW+SE)",
+        10: "two (NE+SE)",
+        11: "three (NW+NE+SE)",
+        12: "two (SW+SE)",
+        13: "three (NW+SW+SE)",
+        14: "three (NE+SW+SE)",
+        15: "four (all)",
     }
     clabels = [f"cls {int(c)} ({class_desc.get(int(c),'?')})"
                for c in tc_all["diag_class"].values]
