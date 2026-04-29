@@ -239,8 +239,8 @@ def make_fig1(ROOT):
     ax_b.set_xticks(x)
     ax_b.set_xticklabels(labels, fontsize=8.5, rotation=18,
                          ha="right", rotation_mode="anchor")
-    ax_b.set_ylabel("$\\Delta R^2$ vs density control", fontsize=9)
-    ax_b.set_title("(b)  Target-specific $\\Delta R^2$ — iso\\_count lifts fine-net only (global pooled)",
+    ax_b.set_ylabel("ΔR² vs density control", fontsize=9)   # Unicode — extracts cleanly
+    ax_b.set_title("(b)  Target-specific ΔR² — iso_count lifts fine-net only (global pooled)",
                    loc="left", fontsize=10, pad=4)
     ax_b.legend(loc="upper right", fontsize=7.5, ncol=2)
 
@@ -248,7 +248,7 @@ def make_fig1(ROOT):
     # max(iso_vals)≈0.0012 so we MUST use axes-fraction for xytext,
     # not data coords derived from iso_vals (those are all near zero).
     fine_bar_x = x[0] - 1.5*w
-    ax_b.annotate(f"iso: $\\Delta R^2 = {iso_vals[0]:.4f}$",
+    ax_b.annotate(f"iso: ΔR² = {iso_vals[0]:.4f}",
                   xy=(fine_bar_x, iso_vals[0]),
                   xycoords="data",
                   xytext=(0.03, 0.62),
@@ -368,7 +368,7 @@ def make_fig3(ROOT):
     ax_a.get_xaxis().set_major_formatter(mticker.ScalarFormatter())
     ax_a.tick_params(axis="x", which="minor", bottom=False)
     ax_a.set_xlabel("Horizon $k$")
-    ax_a.set_ylabel(r"Mean $\beta_{\mathrm{iso}}(k)$")
+    ax_a.set_ylabel("Mean β_iso(k)")   # Unicode β — extracts cleanly from PDF
     ax_a.set_title("(a)  Response slope vs horizon", loc="left", fontsize=10)
     ax_a.legend(loc="upper left", fontsize=7.5)   # slopes cluster near −0.7; top is white space
     ax_a.set_ylim(top=0.05)
@@ -715,11 +715,11 @@ def make_fig7(ROOT):
     model_order = ["full", "size_rho", "rule_size_rho", "size_only", "rho_only", "rule_only"]
     model_label = {
         "full":          "full",
-        "size_rho":      "size+$\\rho$",
-        "rule_size_rho": "rule+size+$\\rho$",
-        "size_only":     "size only",
-        "rho_only":      "$\\rho$ only",
-        "rule_only":     "rule only",
+        "size_rho":      "size+rho",
+        "rule_size_rho": "rule+size+rho",
+        "size_only":     "size",
+        "rho_only":      "rho",
+        "rule_only":     "rule",
     }
     mod_col_name = "amplitude_model" if "amplitude_model" in am_iso.columns else "model"
     am_iso = am_iso.set_index(mod_col_name).reindex(model_order).reset_index()

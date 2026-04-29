@@ -53,7 +53,7 @@ Both pathways reduce the fine-component count, and a local-window loss
 feature captures this with $R^2 = \localwinR$.
 After condition standardisation the mechanism transfers across held-out rule,
 size, and density ($R^2_z = \transferFateAll$), while raw amplitude
-is predictable from grid size and density (LOO $R^2 = \ampLOOfull$).
+is predictable from grid size and density (LOO $R^2 = \ampLOOsizerho$).
 These results illustrate target-indexed description: embedded isolates are
 privileged specifically for future fine-component change, not for other
 summary statistics of the same automaton state.
@@ -563,7 +563,8 @@ The one-step mechanism is local component-context loss ($R^2 = \localwinR$),
 not simple cell death; single-diagonal isolates die exactly by the $S_{23}$
 rule, while multi-diagonal isolates often survive-connected.
 The standardised direction transfers across all leave-one-out axes and
-raw amplitude is calibrated by $(L,\rho)$ with LOO $R^2 = \ampLOOfull$.
+raw amplitude is calibrated by $(L,\rho)$ with LOO $R^2 = \ampLOOsizerho$
+(two-predictor model; $\ampLOOfull$ in the full six-predictor model).
 
 \textit{Common-direction diagnostic.}
 A descriptive check on why a single statistic serves all fine-net horizons
@@ -596,10 +597,10 @@ effective coarse-graining.
 
 \textit{The two-layer structure.}
 The decomposition $\biso(\text{cond}) \approx A(L,\rho)\,\biso,z$ cleanly
-separates the universal mechanism from the condition-specific scale.
+separates the transferable standardised mechanism from the condition-specific scale.
 This matters for applications: if a practitioner has access to a new
 $(L,\rho)$ condition, they can predict the raw slope amplitude with
-LOO $R^2 \approx \ampLOOfull$ from $(L,\rho)$ alone, and they can
+LOO $R^2 \approx \ampLOOsizerho$ from $(L,\rho)$ alone, and they can
 apply the standardised slope direction directly from the training pool.
 The two layers are independently portable.
 
@@ -671,7 +672,8 @@ death: single-diagonal isolates die exactly under the shared $S_{23}$
 rule; multi-diagonal isolates often survive-connected.
 This standardised mechanism transfers across all leave-one-out axes
 and the raw amplitude is predictable from $(L,\rho)$
-(LOO $R^2 = \ampLOOfull$).
+(LOO $R^2 = \ampLOOsizerho$, rising to $\ampLOOfull$ in the full
+six-predictor model).
 The collinearity of fine-net regression directions ($|\cos| = \horizonCos$)
 provides a compact geometric diagnostic of why one prestate statistic
 serves all tested horizons simultaneously.
