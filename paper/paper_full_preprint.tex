@@ -35,45 +35,31 @@
 
 \begin{abstract}
 Life-like cellular automata exhibit \emph{local topological fragility}:
-initial configurations with many structurally isolated or weakly-connected
-live cells experience greater future loss of fine-scale connected components.
-We characterise this fragility through a battery of sixteen topology
-statistics---from initial component count to local cell motifs---and identify
-one compact, mechanistically transparent motif within the family:
-the \emph{embedded isolate}, an alive cell with no orthogonal live neighbour
-and at least one diagonal live neighbour.
+the initial density of weakly-connected live cells predicts future loss of
+fine-scale connected components.
 Across Conway's Game of Life (GoL) and HighLife, two grid sizes
-($L\in\{64,128\}$), four initial densities ($\rho\in\{0.20,\ldots,0.35\}$),
-and seven prediction horizons, the $t{=}0$ embedded-isolate count predicts
-future fine-component loss (mean prestate $R^2 = \prestateIsoMean$;
-minimum $R^2 = \prestateIsoMin$ at $k=200$; shuffle $\approx \prestateIsoShuffle$).
+($L\in\{64,128\}$), four densities, and seven forecast horizons,
+a sixteen-statistic topology battery identifies a predictive hierarchy:
+initial component count $C(0)$ (mean residual $R^2 = \topCompCountR$),
+small-component counts ($\topSmallLeqFourR$), singleton/orthogonal-degree-zero
+cells ($\topSingletonR$), and \emph{embedded isolates}---alive cells with
+no orthogonal and at least one diagonal live neighbour---as the
+mechanistically transparent motif
+($R^2 = \topIsoEmbeddedR$; prestate $R^2 = \prestateIsoMean$;
+min $\prestateIsoMin$ at $k=200$; shuffle $\approx\prestateIsoShuffle$).
 
-The topology-baseline battery reveals a predictive hierarchy: initial
-component count $C(0)$ is the strongest aggregate predictor
-(mean residual $R^2 = \topCompCountR$); singleton components and
-orthogonal-degree-zero cells are the strongest among purely local cell
-statistics ($R^2 = \topSingletonR$); embedded isolates are the most
-mechanistically transparent subclass ($R^2 = \topIsoEmbeddedR$).
-The effect is target-specific: embedded-isolate count gives a selective
-incremental lift for fine-component change while both iso-shuffle and
-target-shuffle increments are near zero ($\Delta R^2 < 0.001$), ruling
-out density artefacts.
-The residual slope $\biso(k)$ is negative in all 112 condition-horizon
-combinations ($k\in\{1,5,10,25,50,100,200\}$, 16 conditions; CV $\lesssim 0.17$).
-
-Mechanistically, any alive cell with orthogonal degree 0 and Moore degree
-0 or 1 dies at $t{+}1$ as an exact consequence of the $S_{23}$ survival rule:
-truly isolated cells (Moore degree 0) and single-diagonal embedded isolates
-(Moore degree 1) both lack the 2--3 live neighbours required for survival.
-Multi-diagonal isolates more often survive by merging into a larger component.
-Both pathways reduce the fine-component count; a local-window loss feature
-captures this with $R^2 = \localwinR$.
-After condition standardisation the mechanism transfers across held-out
-conditions ($R^2_z = \transferFateAll$), and raw amplitude is predictable
-from grid size and density (LOO $R^2 = \ampLOOsizerho$).
-These results characterise local topological fragility as a target-indexed
-description: the initial density of weakly-connected live cells is privileged
-specifically for predicting future fine-component change.
+The effect is target-specific: both shuffle increments are near zero
+($\Delta R^2 < 0.001$), and the residual slope $\biso(k)$ is negative
+in all 112 condition-horizon combinations
+($k\in\{1,5,10,25,50,100,200\}$; CV $\lesssim0.17$).
+Mechanistically, any orthogonal-degree-zero cell with Moore degree 0 or 1
+dies at $t{+}1$ as an exact $S_{23}$ rule consequence; multi-diagonal
+isolates more often survive-connected.
+Both pathways reduce the component count; a local-window feature captures
+this ($R^2 = \localwinR$).
+The standardised mechanism transfers across held-out conditions
+($R^2_z = \transferFateAll$), and raw amplitude is calibrated from
+$(L,\rho)$ (LOO $R^2 = \ampLOOsizerho$).
 \end{abstract}
 
 \keywords{cellular automata, coarse-graining, embedded isolated cells,
@@ -362,7 +348,7 @@ There are no outlier conditions or horizons.
 \begin{table}[htbp]
 \centering
 \caption{Temporal response summary (16 conditions, 1000 worlds each;
-bootstrap CIs, 500 draws).  All slopes and slope confidence intervals
+bootstrap CIs, $\geq$300 draws).  All slopes and slope confidence intervals
 are negative at every horizon ($\text{frac\_CI\_neg} = 1.00$).}
 \label{tab:horizon}
 \begin{tabular}{rrrrrr}
@@ -449,7 +435,7 @@ Embedded isolates remain the mechanistically preferred motif because the
 diagonal-tethering condition gives them a concrete component-context
 interpretation absent from truly isolated floating cells.
 
-More often they survive-connected: they merge with a larger component
+Two- and three-diagonal embedded isolates more often survive-connected: they merge with a larger component
 and reduce the fine component count by absorbing an independent component.
 Both pathways lead to the same aggregate outcome---local fine-connectivity
 loss---which is why the local-window loss feature ($R^2 = \localwinR$)

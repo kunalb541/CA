@@ -54,9 +54,9 @@ outputs/                 # All simulation outputs (pre-computed)
     fig4_studyB_r2_vs_B_source.csv
     fig6_studyD_slope_summary_source.csv
 paper/                   # Manuscript sources
-  paper.tex              # Lean journal version (21 pages)
+  paper.tex              # Lean journal version (19 pages)
   paper.pdf
-  paper_full_preprint.tex  # Full preprint (25 pages; adds Fig. 8 + background appendix)
+  paper_full_preprint.tex  # Full preprint (23 pages; adds Fig. 8 + background appendix)
   paper_full_preprint.pdf
   appendix_background.tex  # Background Appendix C (included by full preprint only)
   refs.bib
@@ -73,7 +73,7 @@ build.sh                 # Root build script
 
 ## Paper structure
 
-### Lean journal version — `paper.pdf` (21 pages)
+### Lean journal version — `paper.pdf` (19 pages)
 
 | Section | Content |
 |---------|---------|
@@ -88,7 +88,7 @@ build.sh                 # Root build script
 | App. A | Regression Details and Null Definitions |
 | App. B | Transition-Class Coding |
 
-### Full preprint — `paper_full_preprint.pdf` (25 pages)
+### Full preprint — `paper_full_preprint.pdf` (23 pages)
 
 Same main text plus Fig. 8 (task-direction coherence diagnostic) in the Discussion
 and Appendix C: Background Observer-Scale Diagnostics (Figs E1–E4).
@@ -117,8 +117,8 @@ for reproducibility; included in `paper_full_preprint.pdf` only.
 This runs `scripts/make_response_law_artifacts.py` (reads `outputs/`, writes
 `paper/figures/` — 8 flagship + 4 background lineage figures — and `paper/tables/`),
 then compiles both `paper.tex` and `paper_full_preprint.tex`, producing
-`paper/paper.pdf` (21 pages, lean journal version),
-`paper/paper_full_preprint.pdf` (25 pages, with Fig. 8 + background appendix),
+`paper/paper.pdf` (19 pages, lean journal version),
+`paper/paper_full_preprint.pdf` (23 pages, with Fig. 8 + background appendix),
 and root copies of both.
 
 No simulations are re-run. All pre-computed outputs are committed to `outputs/`.
