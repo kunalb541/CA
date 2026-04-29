@@ -63,7 +63,7 @@ $(L,\rho)$ (LOO $R^2 = \ampLOOsizerho$).
 \end{abstract}
 
 \keywords{cellular automata, coarse-graining, embedded isolated cells,
-temporal response, mechanism transfer, observer-dependent description}
+temporal response, mechanism transfer}
 
 \maketitle
 
@@ -252,6 +252,9 @@ across horizons, falling no lower than $\prestateIsoMin$ at $k=200$.
     iso\_count adds a positive incremental $\Delta R^2 = \finenetDeltaRtwo$
     for fine-net only; both nulls are near zero ($\Delta R^2 < 0.001$),
     confirming the signal is not a density artefact.
+    The $\Delta R^2$ bar is small because it measures incremental lift over
+    a strong density baseline; the main residual effect size is the
+    condition-wise prestate $R^2$ shown in Fig.~\ref{fig:prestate}.
   }
   \label{fig:object_selection}
 \end{figure}
@@ -406,7 +409,7 @@ $R^2_{\rm local\_win} = \localwinR$, compared with
 $R^2_{\rm iso\_count} = \isocountR$.
 The full fate set reaches $R^2_{\rm all\_fates} = \allfatesR$.
 Critically, the local-window gain (iso\_local\_window\_gain\_sum) has a
-positive slope, partially offsetting the loss: the net mechanism is
+positive slope, partially offsetting the loss: the net mechanistic pathway is
 \emph{local component-context loss}, not simple cell death.
 Figure~\ref{fig:mechanism}b shows the standardised slopes for each fate
 feature, revealing the partial cancellation between loss and gain.
@@ -529,8 +532,9 @@ rule indicator, and three cross-terms) adds only marginal gain
 Size-only gives LOO $R^2 \approx \ampLOOsizeonly$; rule-only gives
 $\ampLOOruleonly$, confirming that grid size $L$ is the dominant predictor
 and rule identity alone is not.
-Because the model is fit at the 16-condition level, these calibration results
-should be read as within-grid evidence rather than a universal scaling law.
+The two-predictor amplitude model uses 16 condition-level observations and
+two predictors; it should be read as a compact within-grid calibration
+rather than a universal scaling law.
 
 The raw response thus decomposes as:
 \begin{equation}
@@ -640,10 +644,12 @@ small-component counts and singleton/orthogonal-degree-zero cells to
 embedded isolates ($R^2 = \topIsoEmbeddedR$) forms a coherent fragility
 family, with embedded isolates as the mechanistically transparent motif.
 The target-specific prestate signal ($R^2 = \prestateIsoMean$; both shuffle
-nulls near zero) arises from a local mechanism---orthogonal-degree-zero cells
-with Moore degree 0 or 1 die exactly under $S_{23}$---that standardises
-and transfers across all leave-one-out axes, with raw amplitude calibrated
-from $(L,\rho)$ (LOO $R^2 = \ampLOOsizerho$).
+nulls near zero) arises via a partial analytic mechanistic pathway: any
+orthogonal-degree-zero cell with Moore degree 0 or 1 dies exactly under
+$S_{23}$ (analytic); multi-diagonal isolates more often survive-connected
+and generate local-window loss (empirical).
+The standardised response transfers across all leave-one-out axes, with
+raw amplitude calibrated from $(L,\rho)$ (LOO $R^2 = \ampLOOsizerho$).
 
 \textit{The two-layer structure.}
 The decomposition $\biso(\text{cond}) \approx A(L,\rho)\,\biso,z$ cleanly
@@ -666,13 +672,38 @@ Raw amplitude transfer without per-condition calibration is not
 supported: amplitude varies with $(L,\rho)$ by a factor of
 $\approx \ampCV$ (CV).
 
+\textit{Rule dependence of the embedded-isolate motif.}
+The exact one-step deaths established here---Moore-degree-0 and
+Moore-degree-1 orthogonal-degree-zero cells dying under $S_{23}$---rely
+on the specific survival set $S=\{2,3\}$ shared by GoL and HighLife.
+A Life-like rule with a different survival set would alter or eliminate
+these exact fates and change the composition of the local-fragility
+hierarchy: the embedded-isolate motif is rule-dependent through its
+dependence on $S_{23}$.
+The broader local-fragility concept---that the initial density of
+weakly-connected live cells predicts future fine-component loss---may
+generalise to other Life-like rules, but whether $C(0)$, small-component
+counts, or embedded isolates retain their relative rankings under
+alternative survival sets is an open empirical question and a natural
+extension of this work.
+
 \textit{Relation to structural and computational work.}
+Component-size and local-connectivity statistics have appeared as descriptors
+in CA pattern analyses~\cite{rupe2018}, but their systematic comparison under
+a common density-residualised predictive protocol---revealing a coherent
+local-fragility hierarchy from $C(0)$ through small-component counts to
+embedded isolates---is, to our knowledge, new.
+The hierarchy parallels intuitions from percolation theory, where
+component-size distributions characterise connectivity near occupation
+thresholds, but the focus here is dynamical: which $t{=}0$ local counts
+predict future change in fine-scale component number.
 Local causal-state methods~\cite{crutchfield1989,rupe2018} infer
-predictive-equivalence partitions from joint past/future lightcone statistics.
-Embedded isolates are a hand-defined structural class within that broader space:
+predictive-equivalence partitions from joint past/future lightcone statistics;
+embedded isolates are a hand-defined structural class within that broader space:
 they are not claimed to be a full predictive-equivalence partition,
 but they capture one target-specific component of future fine-connectivity
-change with a simple geometric definition.
+change with a simple geometric definition and without requiring lightcone
+data or a learned partition.
 The amplitude calibration does not conflict with coarse-graining impossibility
 results~\cite{israeli2004}: we predict one low-dimensional target statistic
 ($\Ck$), not the full future CA configuration.
@@ -729,7 +760,7 @@ $2 \text{ rules} \times 2 \text{ sizes} \times 4 \text{ density levels}$),
 an empirical regularity that holds without exception across the scoped battery.
 Both iso-shuffle and target-shuffle incremental nulls are near zero
 ($\Delta R^2 < 0.001$), ruling out density artefacts.
-The one-step mechanism is local component-context loss, not simple cell
+The one-step mechanistic pathway is local component-context loss, not simple cell
 death: any orthogonal-degree-zero cell with Moore degree 0 or 1 dies exactly
 under the shared $S_{23}$ rule; two- and three-diagonal isolates often
 survive-connected.
@@ -783,6 +814,52 @@ is recomputed with the original iso\_count.
 Both converge near zero ($\Delta R^2 < 0.001$), confirming the signal
 depends on the joint alignment of iso\_count with $\Ck$ and is not
 a density or permutation artefact.
+
+\subsection*{$R^2$ notation and computation contexts}
+
+Six distinct $R^2$ quantities appear in this paper; they answer different
+questions and should not be compared directly.
+Table~\ref{tab:r2notation} provides a concise reference.
+
+\begin{table}[htbp]
+\centering
+\caption{$R^2$ quantities used in this paper, their computation, and the
+sections in which they appear.
+All fits are OLS unless noted.
+``Condition-wise'' means fitted independently within each of the
+16 rule$\times$size$\times$density batteries.}
+\label{tab:r2notation}
+\begin{tabular}{p{3.0cm}p{5.5cm}l}
+\toprule
+Quantity & Computation & Sections \\
+\midrule
+Ordinary $R^2$ &
+  OLS variance explained; no cross-validation; used for prestate fits &
+  \ref{sec:selection} \\[4pt]
+Residual $R^2$ &
+  $R^2$ of iso\_count after $N_{\rm live}(0)$ projected out;
+  condition-wise &
+  \ref{sec:selection}, \ref{sec:horizon},
+  \ref{sec:baselines} \\[4pt]
+$\Delta R^2$ &
+  $R^2(\text{density+predictor}) - R^2(\text{density only})$;
+  condition-wise target-selection screen &
+  \ref{sec:selection} \\[4pt]
+CV $R^2$ &
+  5-fold cross-validated $R^2$; condition-wise;
+  used for mechanism features &
+  \ref{sec:mechanism} \\[4pt]
+$R^2_z$ (standardised) &
+  OLS on $z$-scored predictors and targets across
+  held-out conditions (LOO axes) &
+  \ref{sec:std_transfer} \\[4pt]
+LOO $R^2$ &
+  Leave-one-out cross-validation on the 16 condition-level
+  amplitudes; two predictors ($\log_2 L$, $\rho$) &
+  \ref{sec:amplitude} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \section{Transition-Class Coding}
 \label{app:classes}
