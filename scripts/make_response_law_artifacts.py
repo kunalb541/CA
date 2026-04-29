@@ -1223,6 +1223,7 @@ if __name__ == "__main__":
     make_figE3(ROOT)
     make_figE4(ROOT)
     write_macros(ROOT)
-    write_horizon_table(ROOT)
-    write_mechanism_table(ROOT)
+    # Tables are inline in paper.tex (use macros.tex values directly).
+    # write_horizon_table and write_mechanism_table generate standalone .tex
+    # files not included by the paper; skip them to keep outputs clean.
     print("Done.")

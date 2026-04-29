@@ -910,18 +910,25 @@ class TestArtifactGenerator:
             )
 
     def test_key_figures_copied(self):
-        """Key figure files should be present in paper/figures/."""
+        """All 8 main figures should be present in paper/figures/ (PDF + PNG)."""
         fig_dir = REPO_ROOT / "paper" / "figures"
-        for fname in [
-            "fig_beta_iso_vs_horizon.png",
-            "fig_fate_r2.png",
-            "fig_transfer_standardized_r2.png",
-            "fig_amplitude_by_condition.png",
+        for stem in [
+            "fig1_object_selection",
+            "fig2_prestate",
+            "fig3_response_slope",
+            "fig4_heatmap",
+            "fig5_mechanism",
+            "fig6_classes",
+            "fig7_transfer_amplitude",
+            "fig8_coherence",
         ]:
-            assert (fig_dir / fname).exists(), f"Missing figure: {fname}"
+            for ext in (".pdf", ".png"):
+                assert (fig_dir / (stem + ext)).exists(), (
+                    f"Missing figure: {stem + ext}"
+                )
 
     def test_background_figures_present(self):
-        """Appendix E background figures (E1-E4) must be generated."""
+        """Background lineage figures (E1-E4) must be generated (repo-only, not in paper)."""
         fig_dir = REPO_ROOT / "paper" / "figures"
         for fname in [
             "figE1_disagreement_scatter.pdf",
@@ -936,7 +943,7 @@ class TestArtifactGenerator:
             assert (fig_dir / fname).exists(), f"Missing background figure: {fname}"
 
     def test_background_source_data_present(self):
-        """Study A/B/D source CSVs for Appendix E must exist in outputs/data/."""
+        """Study A/B/D source CSVs for background lineage figures must exist in outputs/data/."""
         data_dir = REPO_ROOT / "outputs" / "data"
         for fname in [
             "fig1_studyA_scatter_source.csv",
@@ -947,7 +954,7 @@ class TestArtifactGenerator:
             assert (data_dir / fname).exists(), f"Missing source CSV: {fname}"
 
     def test_background_source_data_nonempty(self):
-        """Source CSVs for Appendix E must have >5 rows each."""
+        """Background source CSVs must have >5 rows each."""
         import pandas as pd
         data_dir = REPO_ROOT / "outputs" / "data"
         for fname, min_rows in [
