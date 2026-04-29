@@ -368,7 +368,7 @@ def make_fig3(ROOT):
     ax_a.get_xaxis().set_major_formatter(mticker.ScalarFormatter())
     ax_a.tick_params(axis="x", which="minor", bottom=False)
     ax_a.set_xlabel("Horizon $k$")
-    ax_a.set_ylabel("Mean $\\hat{\\beta}_{\\rm iso}(k)$")
+    ax_a.set_ylabel(r"Mean $\beta_{\mathrm{iso}}(k)$")
     ax_a.set_title("(a)  Response slope vs horizon", loc="left", fontsize=10)
     ax_a.legend(loc="upper left", fontsize=7.5)   # slopes cluster near −0.7; top is white space
     ax_a.set_ylim(top=0.05)
