@@ -241,18 +241,23 @@ def make_fig1(ROOT):
                    loc="left", fontsize=10, pad=4)
     ax_b.legend(loc="upper right", fontsize=7.5, ncol=2)
 
-    # Annotate iso fine-net bar: arrow comes down from a clearly visible text position
+    # Annotate iso fine-net bar.
+    # max(iso_vals)≈0.0012 so we MUST use axes-fraction for xytext,
+    # not data coords derived from iso_vals (those are all near zero).
     fine_bar_x = x[0] - 1.5*w
     ax_b.annotate(f"iso: $\\Delta R^2 = {iso_vals[0]:.4f}$",
                   xy=(fine_bar_x, iso_vals[0]),
-                  xytext=(fine_bar_x + 0.05, max(iso_vals) * 0.35),
-                  arrowprops=dict(arrowstyle="->", color=BLUE, lw=0.9,
-                                  connectionstyle="arc3,rad=-0.25"),
-                  fontsize=7.5, va="center", ha="left", color=BLUE)
-    # Null note: placed to right of the null bar, well below the iso annotation
-    ax_b.text(x[0] + 1.5*w + 0.15, iso_vals[0] * 0.8,
+                  xycoords="data",
+                  xytext=(0.03, 0.62),
+                  textcoords="axes fraction",
+                  arrowprops=dict(arrowstyle="->", color=BLUE, lw=1.1,
+                                  connectionstyle="arc3,rad=0.30"),
+                  fontsize=8.5, va="center", ha="left", color=BLUE,
+                  fontweight="bold")
+    # Null note: just right of the null bar group for fine_net
+    ax_b.text(x[0] + 1.5*w + 0.10, iso_vals[0] * 0.6,
               "null $\\approx 0$", ha="left", va="center",
-              fontsize=7, color="#888888", style="italic")
+              fontsize=7.5, color="#888888", style="italic")
 
     _savefig(fig, "fig1_object_selection.pdf")
     _savefig(fig, "fig1_object_selection.png")
@@ -590,15 +595,25 @@ def make_fig6(ROOT):
     ax.set_title("Class contribution: $p \\times$ mean local response", fontsize=10, pad=6)
     ax.axvline(0, color=BLACK, linewidth=0.8)
 
-    # Annotate death fraction
+    # Annotate death fraction.
+    # Short bars (|pval| < 0.035) cannot fit the label inside — place outside.
+    INSIDE_THRESH = -0.035
     tsm_gol = tsm[tsm["rule"] == "GoL"].copy() if "rule" in tsm.columns else tsm
     if "death_frac" in tsm_gol.columns:
         for i, row in enumerate(tc_all.itertuples()):
             sub = tsm_gol[tsm_gol["diag_class"] == row.diag_class]
             if len(sub):
                 df_val = float(sub["death_frac"].mean())
-                ax.text(-0.005, yc[i], f"d={df_val:.2f}",
-                        ha="right", va="center", fontsize=7, color="#444")
+                pval   = row.p_times_delta
+                if pval < INSIDE_THRESH:
+                    # long enough bar: label just inside right edge
+                    ax.text(-0.005, yc[i], f"d={df_val:.2f}",
+                            ha="right", va="center", fontsize=7, color="#444")
+                else:
+                    # short bar: label in white space to the right of zero
+                    ax.text(0.004, yc[i], f"d={df_val:.2f}",
+                            ha="left", va="center", fontsize=7, color="#444")
+    ax.set_xlim(right=0.055)   # right margin for outside labels
 
     _savefig(fig, "fig6_classes.pdf")
     _savefig(fig, "fig6_classes.png")
@@ -820,9 +835,12 @@ def make_figE2(ROOT):
     df = pd.read_csv(ROOT / "outputs/data/fig2_studyA_traces_source.csv")
     T_EARLY = 10   # early-window horizon used to define delta_early in Study A
 
+    # Extract G values first so f-strings stay backslash-free
+    g_pos_val = float(df[df["label"] == "G>0"]["G"].iloc[0])
+    g_neg_val = float(df[df["label"] == "G<0"]["G"].iloc[0])
     panel_data = [
-        ("G>0", f"Maximum positive gap\n($G={df[df['label']=='G>0']['G'].iloc[0]:.3f}$)"),
-        ("G<0", f"Maximum negative gap\n($G={df[df['label']=='G<0']['G'].iloc[0]:.3f}$)"),
+        ("G>0", f"Maximum positive gap\n($G={g_pos_val:.3f}$)"),
+        ("G<0", f"Maximum negative gap\n($G={g_neg_val:.3f}$)"),
     ]
 
     fig, axes = plt.subplots(1, 2, figsize=(9.0, 4.2), sharey=False)
@@ -845,7 +863,10 @@ def make_figE2(ROOT):
         ax.set_xlabel("Step $t$", fontsize=9)
         ax.set_ylabel("Cumulative net change", fontsize=9)
         ax.set_title(title, fontsize=9.5, pad=6)
-        ax.legend(fontsize=7.5, loc="lower left", framealpha=0.9)
+        # Left panel: large gap between fine (−350) and coarse (−25) → center right
+        # Right panel: large empty area above both curves → upper right
+        leg_loc = "center right" if label == "G>0" else "upper right"
+        ax.legend(fontsize=7.5, loc=leg_loc, framealpha=0.9)
 
     fig.suptitle("Illustrative fine and coarse cumulative component change  (Study A extremes)",
                  fontsize=10.5, y=0.97)
