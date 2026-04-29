@@ -764,6 +764,206 @@ def make_fig8(ROOT):
 
 
 # ---------------------------------------------------------------------------
+# Background appendix figures (Appendix E)
+# These reproduce the earlier observer-scale diagnostics that motivated the
+# response-law work.  They are NOT load-bearing for the main response-law
+# claims; they belong in Appendix E only.
+# ---------------------------------------------------------------------------
+
+def make_figE1(ROOT):
+    """Appendix E1: Observer disagreement scatter (Study A)."""
+    from scipy import stats
+    _apply_style()
+
+    df = pd.read_csv(ROOT / "outputs/data/fig1_studyA_scatter_source.csv")
+    x = df["delta_early"].values
+    y = df["G"].values
+    rho = df["density"].values
+
+    r_val, _ = stats.pearsonr(x, y)
+    slope, intercept, *_ = stats.linregress(x, y)
+    x_line = np.linspace(x.min(), x.max(), 200)
+
+    fig, ax = plt.subplots(figsize=(6.5, 5.0))
+    fig.subplots_adjust(left=0.12, right=0.88, top=0.90, bottom=0.13)
+
+    sc = ax.scatter(x, y, c=rho, cmap="viridis", s=14, alpha=0.55,
+                    linewidths=0, zorder=2)
+    ax.plot(x_line, slope * x_line + intercept,
+            color=ORANGE, linewidth=2.0, zorder=3, label=f"OLS fit  ($r={r_val:.3f}$)")
+
+    cbar = fig.colorbar(sc, ax=ax, pad=0.03, shrink=0.85)
+    cbar.set_label("Initial cell density $\\rho$", fontsize=9)
+    cbar.ax.tick_params(labelsize=8)
+
+    ax.axhline(0, color=BLACK, linewidth=0.6, linestyle="--", alpha=0.4)
+    ax.axvline(0, color=BLACK, linewidth=0.6, linestyle="--", alpha=0.4)
+
+    ax.set_xlabel("Early fine-scale cumulative net change  $\\Delta C_{\\rm early}$", fontsize=9)
+    ax.set_ylabel("Observer gap  $G$", fontsize=9)
+    ax.set_title("Observer disagreement vs.\ early fine-scale change  (Study A, $n=1{,}000$)",
+                 fontsize=10, pad=8)
+
+    ax.text(0.97, 0.97, f"$r = {r_val:.3f}$",
+            transform=ax.transAxes, ha="right", va="top", fontsize=9,
+            color=ORANGE, fontweight="bold")
+    ax.legend(loc="upper left", fontsize=8.5, framealpha=0.9)
+
+    _savefig(fig, "figE1_disagreement_scatter.pdf")
+    _savefig(fig, "figE1_disagreement_scatter.png")
+
+
+def make_figE2(ROOT):
+    """Appendix E2: Illustrative fine vs coarse observer trajectories (Study A)."""
+    _apply_style()
+
+    df = pd.read_csv(ROOT / "outputs/data/fig2_studyA_traces_source.csv")
+    T_EARLY = 10   # early-window horizon used to define delta_early in Study A
+
+    panel_data = [
+        ("G>0", f"Maximum positive gap\n($G={df[df['label']=='G>0']['G'].iloc[0]:.3f}$)"),
+        ("G<0", f"Maximum negative gap\n($G={df[df['label']=='G<0']['G'].iloc[0]:.3f}$)"),
+    ]
+
+    fig, axes = plt.subplots(1, 2, figsize=(9.0, 4.2), sharey=False)
+    fig.subplots_adjust(left=0.09, right=0.97, top=0.85, bottom=0.14, wspace=0.32)
+
+    for ax, (label, title) in zip(axes, panel_data):
+        sub = df[df["label"] == label].sort_values("step")
+        steps = sub["step"].values
+        fine  = sub["net_F_cum"].values
+        coarse = sub["net_C_cum"].values
+
+        ax.axvspan(0, T_EARLY, color=LBLUE, alpha=0.20, zorder=0,
+                   label=f"Early window ($t \\leq {T_EARLY}$)")
+        ax.axhline(0, color=BLACK, linewidth=0.5, linestyle="--", alpha=0.4, zorder=1)
+
+        ax.plot(steps, fine,   color=BLUE,   linewidth=1.8, label="Fine cumulative $\\Delta C_F$",   zorder=3)
+        ax.plot(steps, coarse, color=ORANGE, linewidth=1.8, linestyle="--",
+                label="Coarse cumulative $\\Delta C_C$", zorder=3)
+
+        ax.set_xlabel("Step $t$", fontsize=9)
+        ax.set_ylabel("Cumulative net change", fontsize=9)
+        ax.set_title(title, fontsize=9.5, pad=6)
+        ax.legend(fontsize=7.5, loc="lower left", framealpha=0.9)
+
+    fig.suptitle("Illustrative fine and coarse cumulative component change  (Study A extremes)",
+                 fontsize=10.5, y=0.97)
+
+    _savefig(fig, "figE2_trajectories.pdf")
+    _savefig(fig, "figE2_trajectories.png")
+
+
+def make_figE3(ROOT):
+    """Appendix E3: Target-relative predictive scale R² vs block size B (Study B)."""
+    _apply_style()
+
+    df = pd.read_csv(ROOT / "outputs/data/fig4_studyB_r2_vs_B_source.csv")
+
+    target_style = {
+        "Nlive":   (BLUE,   "o-",  "Live-cell count $N_{\\rm live}$"),
+        "Nocc8":   (ORANGE, "s-",  "Occupied 8-cells $N_{\\rm occ8}$"),
+        "A":       (GREEN,  "^-",  "Observer agreement $A$"),
+        "Gfuture": (GRAY,   "D-",  "Future observer gap $G_{\\rm future}$"),
+    }
+
+    fig, ax = plt.subplots(figsize=(5.8, 4.2))
+    fig.subplots_adjust(left=0.13, right=0.97, top=0.88, bottom=0.13)
+
+    for target, (color, marker, label) in target_style.items():
+        sub = df[df["target"] == target].sort_values("B")
+        if len(sub) == 0:
+            continue
+        ax.plot(sub["B"], sub["R2"], marker, color=color, linewidth=1.8,
+                markersize=6, label=label, zorder=3)
+        # Mark peak
+        peak_idx = sub["R2"].idxmax()
+        peak_B   = sub.loc[peak_idx, "B"]
+        peak_R2  = sub.loc[peak_idx, "R2"]
+        ax.plot(peak_B, peak_R2, "o", color=color, markersize=9,
+                markeredgecolor="white", markeredgewidth=1.2, zorder=4)
+
+    ax.axhline(0, color=BLACK, linewidth=0.5, linestyle="--", alpha=0.4)
+    ax.set_xlabel("Block size $B$", fontsize=9)
+    ax.set_ylabel("$R^2$", fontsize=9)
+    ax.set_title("Target-relative predictive scale: $R^2$ vs.\ block size  (Study B)",
+                 fontsize=10, pad=8)
+    ax.set_xticks([1, 2, 4, 8, 16])
+    ax.legend(fontsize=7.5, loc="upper right", framealpha=0.9)
+
+    _savefig(fig, "figE3_scale_R2.pdf")
+    _savefig(fig, "figE3_scale_R2.png")
+
+
+def make_figE4(ROOT):
+    """Appendix E4: Old GoL-only six-condition slope summary (Study D).
+
+    IMPORTANT: this uses a DIFFERENT, non-residualized protocol from the
+    main-text response-law battery.  The slopes here (~-1.5) are not
+    directly comparable to the residualized horizon slopes (~-0.70) in
+    the main text.
+    """
+    _apply_style()
+
+    df = pd.read_csv(ROOT / "outputs/data/fig6_studyD_slope_summary_source.csv")
+
+    # Pretty labels
+    label_map = {
+        "G64_low":  "GoL $64{\\times}64$, $\\rho=0.10$--$0.20$",
+        "G64_mid":  "GoL $64{\\times}64$, $\\rho=0.25$--$0.35$",
+        "G64_high": "GoL $64{\\times}64$, $\\rho=0.35$--$0.50$",
+        "G128_low": "GoL $128{\\times}128$, $\\rho=0.10$--$0.20$",
+        "G128_mid": "GoL $128{\\times}128$, $\\rho=0.25$--$0.35$",
+        "G128_high":"GoL $128{\\times}128$, $\\rho=0.35$--$0.50$",
+    }
+    color_map = {"64": BLUE, "128": ORANGE}
+
+    # Plot in order: 64 conditions first, then 128
+    order = ["G64_low","G64_mid","G64_high","G128_low","G128_mid","G128_high"]
+    df["_order"] = df["cond_id"].map({k: i for i, k in enumerate(order)})
+    df = df.sort_values("_order").reset_index(drop=True)
+
+    fig, ax = plt.subplots(figsize=(7.0, 4.5))
+    fig.subplots_adjust(left=0.38, right=0.96, top=0.88, bottom=0.13)
+
+    y = np.arange(len(df))
+    for i, row in df.iterrows():
+        grid_key = str(int(row["grid"]))
+        color = color_map.get(grid_key, BLACK)
+        ax.plot(row["beta_emp"], y[i], "o", color=color,
+                markersize=7, zorder=4)
+        ax.plot([row["slope_ci95_lo"], row["slope_ci95_hi"]], [y[i], y[i]],
+                color=color, linewidth=2.2, alpha=0.75, zorder=3)
+
+    ax.axvline(0, color=BLACK, linewidth=0.7, linestyle="--", alpha=0.5)
+    mean_beta = df["beta_emp"].mean()
+    ax.axvline(mean_beta, color=GRAY, linewidth=1.0, linestyle=":",
+               label=f"Mean $\\beta = {mean_beta:.2f}$")
+
+    ax.set_yticks(y)
+    ax.set_yticklabels([label_map.get(r, r) for r in df["cond_id"]], fontsize=8)
+    ax.set_xlabel("Empirical slope $\\beta_{\\rm emp}$  (GoL-only, non-residualized protocol)",
+                  fontsize=9)
+    ax.set_title("Earlier GoL-only component-law slope summary  (Study D)",
+                 fontsize=10, pad=8)
+    ax.invert_yaxis()
+
+    from matplotlib.lines import Line2D
+    leg_handles = [
+        Line2D([0],[0], marker="o", color=BLUE,   lw=2, markersize=7,
+               label="$L=64$"),
+        Line2D([0],[0], marker="o", color=ORANGE, lw=2, markersize=7,
+               label="$L=128$"),
+        Line2D([0],[0], color=GRAY, lw=1, linestyle=":",
+               label=f"Mean $\\beta = {mean_beta:.2f}$"),
+    ]
+    ax.legend(handles=leg_handles, fontsize=7.5, loc="lower right", framealpha=0.9)
+
+    _savefig(fig, "figE4_old_slopes.pdf")
+    _savefig(fig, "figE4_old_slopes.png")
+
+
+# ---------------------------------------------------------------------------
 # Macros
 # ---------------------------------------------------------------------------
 def _get_horizon_row(df, k):
@@ -993,6 +1193,11 @@ if __name__ == "__main__":
     make_fig6(ROOT)
     make_fig7(ROOT)
     make_fig8(ROOT)
+    # Appendix E background diagnostics (old observer-scale paper)
+    make_figE1(ROOT)
+    make_figE2(ROOT)
+    make_figE3(ROOT)
+    make_figE4(ROOT)
     write_macros(ROOT)
     write_horizon_table(ROOT)
     write_mechanism_table(ROOT)

@@ -919,3 +919,44 @@ class TestArtifactGenerator:
             "fig_amplitude_by_condition.png",
         ]:
             assert (fig_dir / fname).exists(), f"Missing figure: {fname}"
+
+    def test_background_figures_present(self):
+        """Appendix E background figures (E1-E4) must be generated."""
+        fig_dir = REPO_ROOT / "paper" / "figures"
+        for fname in [
+            "figE1_disagreement_scatter.pdf",
+            "figE1_disagreement_scatter.png",
+            "figE2_trajectories.pdf",
+            "figE2_trajectories.png",
+            "figE3_scale_R2.pdf",
+            "figE3_scale_R2.png",
+            "figE4_old_slopes.pdf",
+            "figE4_old_slopes.png",
+        ]:
+            assert (fig_dir / fname).exists(), f"Missing background figure: {fname}"
+
+    def test_background_source_data_present(self):
+        """Study A/B/D source CSVs for Appendix E must exist in outputs/data/."""
+        data_dir = REPO_ROOT / "outputs" / "data"
+        for fname in [
+            "fig1_studyA_scatter_source.csv",
+            "fig2_studyA_traces_source.csv",
+            "fig4_studyB_r2_vs_B_source.csv",
+            "fig6_studyD_slope_summary_source.csv",
+        ]:
+            assert (data_dir / fname).exists(), f"Missing source CSV: {fname}"
+
+    def test_background_source_data_nonempty(self):
+        """Source CSVs for Appendix E must have >5 rows each."""
+        import pandas as pd
+        data_dir = REPO_ROOT / "outputs" / "data"
+        for fname, min_rows in [
+            ("fig1_studyA_scatter_source.csv", 100),
+            ("fig2_studyA_traces_source.csv",  10),
+            ("fig4_studyB_r2_vs_B_source.csv", 4),
+            ("fig6_studyD_slope_summary_source.csv", 4),
+        ]:
+            df = pd.read_csv(data_dir / fname)
+            assert len(df) >= min_rows, (
+                f"{fname}: expected >= {min_rows} rows, got {len(df)}"
+            )
