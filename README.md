@@ -1,4 +1,4 @@
-# Embedded Isolates Predict Fine-Component Loss in Life-Like Cellular Automata
+### Embedded Isolates Predict Fine-Component Loss in Life-Like Cellular Automata
 
 **Kunal Bhatia** · Independent Researcher, Heidelberg, Germany  
 ORCID: [0009-0007-4447-6325](https://orcid.org/0009-0007-4447-6325)
