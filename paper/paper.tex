@@ -35,8 +35,9 @@ with a stable negative coefficient across all tested conditions.
 Four interlocking results establish this.
 (i)~\emph{Target-specific selection}: iso\_count adds $\Delta R^2 =
 \finenetDeltaRtwo$ for the fine-net component target (GoL: \golSelVerdict;
-global: PASS) while iso-shuffle and target-shuffle incremental nulls are
-near zero ($\Delta R^2 < 0.001$), ruling out density artefacts.
+HighLife: WEAK PASS; global: PASS) while iso-shuffle and target-shuffle
+incremental nulls are near zero ($\Delta R^2 < 0.001$), ruling out
+density artefacts.
 (ii)~\emph{Temporal response law}: the residual slope $\biso(k)$ ranges
 from $\horizonkone$ at $k=1$ to $\horizonktwohundred$ at $k=200$
 (CV $\lesssim 0.17$) and is negative for all 112 condition-horizon
@@ -176,7 +177,9 @@ The central diagnostic is a selection-principle battery
 (Fig.~\ref{fig:object_selection}b): for each candidate predictor
 (iso\_count, coarse block-variance, block entropy, iso-shuffle null,
 target-shuffle null) we measure $\Delta R^2 = R^2(\text{density + predictor})
-- R^2(\text{density only})$ on seven prediction targets.
+- R^2(\text{density only})$ on six displayed targets
+(note: \texttt{target\_delta\_components} and \texttt{target\_fine\_net}
+are numerically identical in this codebase and one is omitted from the plot).
 
 For iso\_count on the fine-net target, the global pooled result is
 $\Delta R^2 = \finenetDeltaRtwo$ (GoL: \golSelVerdict; global: PASS).
@@ -207,7 +210,9 @@ with the same marginal scale.
     This configuration places the cell at the most unstable locus of
     the local component topology.
     (b)~$\Delta R^2$ bars for iso\_count and comparison predictors
-    (coarse, entropy, null) on all seven prediction targets (global pooled).
+    (coarse, entropy, null) on six displayed targets (global pooled;
+    \texttt{target\_delta\_components} is numerically identical to fine-net
+    and omitted).
     iso\_count adds $\Delta R^2 = \finenetDeltaRtwo$ for fine-net only;
     both nulls are near zero ($\Delta R^2 < 0.001$), confirming
     the signal is not a density artefact.
@@ -547,7 +552,7 @@ mean pairwise $|\cos| = \selCos$,
 rank-1 energy $= \selRankone$, and mean relative regret $= \selRegret$.
 No single description direction serves all heterogeneous targets.
 
-This contrast provides a formal geometric account of the empirical
+This contrast provides a compact geometric summary of the empirical
 results: iso\_count works across all fine-net horizons because those
 tasks are nearly collinear in description space.
 The heterogeneous target family is not collinear, and indeed no single
@@ -722,13 +727,15 @@ pattern of the four diagonal neighbours of an embedded isolate
 (NW, NE, SW, SE), with class $c$ equal to the binary value
 $\textit{NW}\cdot 1 + \textit{NE}\cdot 2 + \textit{SW}\cdot 4 +
 \textit{SE}\cdot 8$.
-Class 15 (all four diagonal neighbours alive) never occurs in practice
-for an embedded isolate that is alive at $t$ (all orthogonal neighbours
-are dead, so the GoL/HighLife birth rule does not make isolated cells
-with 4 alive diagonal neighbours common in random initial states).
+Class 15 (all four diagonal neighbours alive) is rare in this battery
+($p \approx 0.009$, $n = 80{,}015$ instances) but contributes a negative
+local response ($\bar\Delta \approx -2.52$, death fraction $= 1.0$)
+comparable to other multi-diagonal classes; it is not excluded from
+the analysis.
 Classes 1, 2, 4, 8 are the \emph{single-diagonal} classes;
 classes 3, 5, 6, 9, 10, 12 are the \emph{two-diagonal} classes;
-classes 7, 11, 13, 14 are the \emph{three-diagonal} classes.
+classes 7, 11, 13, 14 are the \emph{three-diagonal} classes;
+class 15 is the \emph{four-diagonal} class.
 
 \section{Test and Regression Battery}
 \label{app:tests}

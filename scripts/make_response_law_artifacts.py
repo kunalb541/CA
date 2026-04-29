@@ -190,28 +190,29 @@ def make_fig1(ROOT):
         pass
     # Simple annotation: text labels
     ax_s.text(-0.32, (4-2)*(sz+gap) + sz/2,
-              "4-connected\nneighbours\ndead",
-              ha="right", va="center", fontsize=8, color="#B03030",
-              bbox=dict(boxstyle="round,pad=0.25", fc="#FFF0F0", ec="#D08080", lw=0.8))
-    # Arrow from annotation to N cell
-    n_cx = 2*(sz+gap) + sz/2
-    n_cy = (4-1)*(sz+gap) + sz/2
-    ax_s.annotate("", xy=(n_cx - sz/2 - 0.04, n_cy),
-                  xytext=(-0.10, n_cy),
+              "orthogonal\nneighbours dead",
+              ha="right", va="center", fontsize=8.5, color="#B03030",
+              bbox=dict(boxstyle="round,pad=0.28", fc="#FFF0F0", ec="#D08080", lw=0.9))
+    # Arrow from annotation to W cell (2,1)
+    w_cx = 1*(sz+gap) + sz       # right edge of col-1 cell
+    w_cy = (4-2)*(sz+gap) + sz/2
+    ax_s.annotate("", xy=(w_cx + 0.04, w_cy),
+                  xytext=(-0.08, w_cy),
                   arrowprops=dict(arrowstyle="-|>", color="#B03030",
-                                  lw=0.8, mutation_scale=10))
+                                  lw=0.9, mutation_scale=11))
 
     # Annotation: diagonal alive neighbours
-    d_cx = 1*(sz+gap) + sz/2   # NW diagonal (1,1)
-    d_cy = (4-1)*(sz+gap) + sz/2
-    ax_s.text(W + 0.3, (4-1)*(sz+gap) + sz/2,
-              "diagonal\nneighbours\n$\\geq 1$ alive",
-              ha="left", va="center", fontsize=8, color="#1A5E1A",
-              bbox=dict(boxstyle="round,pad=0.25", fc="#F0FFF0", ec="#80B080", lw=0.8))
-    ax_s.annotate("", xy=(3*(sz+gap), (4-1)*(sz+gap) + sz/2),
-                  xytext=(W + 0.25, (4-1)*(sz+gap) + sz/2),
+    ax_s.text(W + 0.32, (4-1)*(sz+gap) + sz/2,
+              "$\\geq 1$ diagonal\nneighbour alive",
+              ha="left", va="center", fontsize=8.5, color="#1A5E1A",
+              bbox=dict(boxstyle="round,pad=0.28", fc="#F0FFF0", ec="#80B080", lw=0.9))
+    # Arrow to NE diagonal cell (1,3)
+    ne_cx = 3*(sz+gap) + sz      # right edge of col-3 cell
+    ne_cy = (4-1)*(sz+gap) + sz/2
+    ax_s.annotate("", xy=(ne_cx + 0.04, ne_cy),
+                  xytext=(W + 0.28, ne_cy),
                   arrowprops=dict(arrowstyle="-|>", color="#1A5E1A",
-                                  lw=0.8, mutation_scale=10))
+                                  lw=0.9, mutation_scale=11))
 
     ax_s.set_title("(a)  Embedded isolate — structural definition",
                    loc="left", fontsize=10, pad=4)
@@ -236,20 +237,20 @@ def make_fig1(ROOT):
     ax_b.set_xticks(x)
     ax_b.set_xticklabels(labels, fontsize=8.5)
     ax_b.set_ylabel("$\\Delta R^2$ vs density control", fontsize=9)
-    ax_b.set_title("(b)  Target specificity — iso\_count signals only for fine-net (global pooled)",
+    ax_b.set_title("(b)  Target-specific $\\Delta R^2$ — iso\\_count lifts fine-net only (global pooled)",
                    loc="left", fontsize=10, pad=4)
     ax_b.legend(loc="upper right", fontsize=7.5, ncol=2)
 
     # Annotate the fine-net iso bar with value
-    ax_b.annotate(f"$\\Delta R^2={iso_vals[0]:.4f}$",
+    ax_b.annotate(f"$\\Delta R^2={iso_vals[0]:.4f}$\n(fine-net only)",
                   xy=(x[0] - 1.5*w, iso_vals[0]),
-                  xytext=(x[0] + 0.5, iso_vals[0] + 0.0002),
-                  arrowprops=dict(arrowstyle="->", color=BLUE, lw=0.8),
+                  xytext=(x[0] + 0.65, iso_vals[0] + 0.00018),
+                  arrowprops=dict(arrowstyle="->", color=BLUE, lw=0.9),
                   fontsize=7.5, va="bottom", ha="left", color=BLUE)
     # Annotate null near zero
-    ax_b.text(x[0] + 1.5*w, 0.00005,
+    ax_b.text(x[0] + 1.5*w, 0.00004,
               "null $\\approx 0$", ha="center", va="bottom",
-              fontsize=6.5, color="#888888", style="italic")
+              fontsize=7, color="#888888", style="italic")
 
     _savefig(fig, "fig1_object_selection.pdf")
     _savefig(fig, "fig1_object_selection.png")
