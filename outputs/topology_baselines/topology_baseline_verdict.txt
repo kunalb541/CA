@@ -1,0 +1,67 @@
+==============================================================
+TOPOLOGY BASELINE CONTROLS — VERDICT
+==============================================================
+Rules:     ['GoL', 'HighLife']
+Sizes:     [64, 128]
+Densities: [0.2, 0.25, 0.3, 0.35]
+Horizons:  [1, 5, 10, 25, 50, 100, 200]
+n_samples: 1000
+
+VERDICT: FAIL
+
+iso_embedded mean residual R2 = 0.2342
+Best predictor:                component_count_t0 = 0.3522
+iso within 5% of best:         False
+iso beats coarse baselines:    False
+  block_var: 0.0091 (below iso)
+  block_entropy: 0.0060 (below iso)
+  component_count_t0: 0.3522 (ABOVE iso)
+
+Full ranking (sorted by mean residual R2):
+  Predictor                     resid_R2   delta_R2   frac_pos
+  ----------------------------  ---------  ---------  --------
+  component_count_t0               0.3522     0.3707     1.000
+  small_comp_le4                   0.3303     0.3514     1.000
+  singleton_comp                   0.2736     0.2802     1.000
+  orth_deg0                        0.2736     0.2802     1.000
+  iso_embedded                     0.2342     0.2307     1.000  <-- iso_embedded
+  orth_deg0_diag_ge1               0.2342     0.2307     1.000
+  moore_deg1                       0.0325     0.0345     1.000
+  moore_deg2                       0.0292     0.0290     1.000
+  small_comp_2                     0.0216     0.0213     1.000
+  orth_deg0_diag0                  0.0120     0.0140     1.000
+  moore_deg0                       0.0120     0.0140     1.000
+  small_comp_3                     0.0120     0.0113     1.000
+  block_var                        0.0091     0.0087     1.000
+  small_comp_4                     0.0079     0.0078     1.000
+  block_entropy                    0.0060     0.0058     1.000
+  boundary_cell                    0.0002     0.0116     1.000
+
+Incremental comparison (iso_embedded vs each competitor):
+  Competitor                    iso_minus_comp  frac_iso_ge
+  ----------------------------  --------------  -----------
+  boundary_cell                        +0.2340        1.000
+  block_entropy                        +0.2281        1.000
+  small_comp_4                         +0.2263        1.000
+  block_var                            +0.2251        1.000
+  small_comp_3                         +0.2222        1.000
+  orth_deg0_diag0                      +0.2221        1.000
+  moore_deg0                           +0.2221        1.000
+  small_comp_2                         +0.2126        1.000
+  moore_deg2                           +0.2050        1.000
+  moore_deg1                           +0.2016        1.000
+  orth_deg0_diag_ge1                   +0.0000        1.000
+  singleton_comp                       -0.0394        0.330
+  orth_deg0                            -0.0394        0.330
+  small_comp_le4                       -0.0962        0.000
+  component_count_t0                   -0.1181        0.000
+
+Interpretation:
+  PASS      => iso_embedded is genuinely special among simple topology
+               statistics; no simpler count matches its predictive content.
+  WEAK PASS => iso_embedded is competitive but not clearly dominant.
+  FAIL      => a simpler statistic is a better predictor; revisit framing.
+
+Note on orth_deg0_diag_ge1:
+  By definition, orth_deg0_diag_ge1 == iso_embedded (same mask).
+  Identical R² confirms the computation is consistent.

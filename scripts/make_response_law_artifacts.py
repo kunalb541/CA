@@ -296,7 +296,7 @@ def make_fig2(ROOT):
     ax.set_xscale("log")
     ax.set_xlabel("Horizon $k$")
     ax.set_ylabel("Residual $R^2$ (prestate only)")
-    ax.set_title("Non-leaky prestate: $t=0$ iso\\_count recovers full $R^2(k)$",
+    ax.set_title("Non-leaky prestate: $t=0$ iso\\_count predicts residual $R^2(k)$",
                  fontsize=10, pad=6)
     ax.legend(loc="upper right", fontsize=8)
     ax.set_xticks([1, 5, 10, 25, 50, 100, 200])

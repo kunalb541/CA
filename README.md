@@ -1,4 +1,4 @@
-### Embedded Isolates Predict Fine-Component Loss in Life-Like Cellular Automata
+# Local Topological Fragility in Game of Life and HighLife
 
 **Kunal Bhatia** · Independent Researcher, Heidelberg, Germany  
 ORCID: [0009-0007-4447-6325](https://orcid.org/0009-0007-4447-6325)
@@ -7,14 +7,16 @@ ORCID: [0009-0007-4447-6325](https://orcid.org/0009-0007-4447-6325)
 
 ## Core result
 
-The count of *embedded isolated cells* — alive cells with no 4-connected live neighbours but at least one diagonal live neighbour — predicts future fine-scale connected-component loss in GoL and HighLife.
+Future fine-scale connected-component loss in GoL and HighLife is controlled by *local topological fragility*: the initial density of weakly-connected or isolated live cells.
+A topology-baseline battery of 16 statistics identifies a predictive hierarchy from initial component count down to embedded isolates — the most mechanistically transparent motif in the family.
 
 Specifically:
-1. **Prestate prediction.** t=0 iso\_count explains a substantial fraction of residual future fine-component change across all tested horizons: mean prestate R² ≈ 0.241, minimum R² ≈ 0.175 at k=200.
-2. **Target-specific selection.** iso\_count gives a selective incremental lift for the fine-net target; both iso-shuffle and target-shuffle nulls are near zero (ΔR² < 0.001).
-3. **Negative temporal response.** β\_iso(k) ≈ −0.70 to −0.80 across all tested horizons k ∈ {1,5,10,25,50,100,200}, two rules (GoL + HighLife), two grid sizes (L=64,128), four density bands. All 112 condition-horizon slopes are negative.
-4. **Mechanism: local component-context loss.** Single-diagonal isolates die exactly under S23 (exact rule consequence); multi-diagonal isolates often survive-connected. Local-window loss CV R² = 0.538 vs iso\_count alone = 0.355.
-5. **Two-layer amplitude structure.** Standardized mechanism is transferable; raw amplitude is predictable from (L, ρ) with LOO R² = 0.977.
+1. **Topology hierarchy.** Initial component count C(0) is strongest (mean residual R² = 0.352); small components (≤4 cells) next (0.330); singleton/orth-degree-zero cells (0.274); *embedded isolates* (0.234) as the mechanistically transparent motif.
+2. **Prestate prediction.** t=0 iso\_count alone explains a substantial fraction of residual fine-component change: mean prestate R² ≈ 0.241, minimum R² ≈ 0.175 at k=200.
+3. **Target-specific selection.** iso\_count gives a selective incremental lift for the fine-net target; both iso-shuffle and target-shuffle nulls are near zero (ΔR² < 0.001).
+4. **Negative temporal response.** β\_iso(k) ≈ −0.70 to −0.80 across all tested horizons k ∈ {1,5,10,25,50,100,200}, two rules (GoL + HighLife), two grid sizes (L=64,128), four density bands. All 112 condition-horizon slopes are negative.
+5. **Mechanism: local component-context loss.** Any orth-degree-zero cell with Moore degree 0 or 1 dies exactly under S23; multi-diagonal isolates often survive-connected. Local-window loss CV R² = 0.538 vs iso\_count alone = 0.355.
+6. **Two-layer amplitude structure.** Standardised mechanism is transferable; raw amplitude is predictable from (L, ρ) with LOO R² = 0.970 (size+ρ model).
 
 ---
 
@@ -33,7 +35,8 @@ scripts/                 # Analysis scripts (run from repo root)
   ca_mechanism_transfer_standardized.py
   ca_mechanism_amplitude_law.py
   ca_prestate_class_horizon_test.py
-  make_response_law_artifacts.py   # generates all figures, macros, tables
+  make_response_law_artifacts.py      # generates all figures, macros, tables
+  ca_topology_baseline_controls.py   # topology baseline controls (16 statistics)
 outputs/                 # All simulation outputs (pre-computed)
   selection_principle/
   selection_principle_horizon/
@@ -44,24 +47,25 @@ outputs/                 # All simulation outputs (pre-computed)
   mechanism_transfer_standardized/
   mechanism_amplitude_law/
   prestate_class_horizon/
+  topology_baselines/    # 16-statistic baseline battery (112 condition-horizon cells)
   data/                  # Source CSVs for background lineage figures (Study A/B/D)
     fig1_studyA_scatter_source.csv
     fig2_studyA_traces_source.csv
     fig4_studyB_r2_vs_B_source.csv
     fig6_studyD_slope_summary_source.csv
 paper/                   # Manuscript sources
-  paper.tex              # Lean journal version (17 pages)
+  paper.tex              # Lean journal version (21 pages)
   paper.pdf
-  paper_full_preprint.tex  # Full preprint (20 pages; adds background appendix)
+  paper_full_preprint.tex  # Full preprint (25 pages; adds Fig. 8 + background appendix)
   paper_full_preprint.pdf
-  appendix_background.tex  # Background Appendix E (included by full preprint only)
+  appendix_background.tex  # Background Appendix C (included by full preprint only)
   refs.bib
-  macros.tex             # auto-generated: 51 LaTeX macros, letters-only names
+  macros.tex             # auto-generated LaTeX macros (letters-only names)
   build.sh               # compiles both paper.pdf and paper_full_preprint.pdf
   figures/               # 8 flagship figures + 4 background lineage figures
   tables/
 paper.pdf                # Lean journal version (root copy)
-paper_full_preprint.pdf  # Full preprint with background appendix (root copy)
+paper_full_preprint.pdf  # Full preprint with Fig. 8 + background appendix (root copy)
 build.sh                 # Root build script
 ```
 
@@ -69,7 +73,7 @@ build.sh                 # Root build script
 
 ## Paper structure
 
-### Lean journal version — `paper.pdf` (17 pages)
+### Lean journal version — `paper.pdf` (21 pages)
 
 | Section | Content |
 |---------|---------|
@@ -78,17 +82,18 @@ build.sh                 # Root build script
 | III | Target-Specific Selection and Non-Leaky Prestate |
 | IV | Temporal Response Curve |
 | V | Mechanism: Local Component-Context Loss |
-| VI | Robustness: Transfer, Amplitude, and Nulls |
+| VI | Robustness: Transfer, Amplitude, and Local Baselines |
 | VII | Discussion |
 | VIII | Conclusion |
 | App. A | Regression Details and Null Definitions |
 | App. B | Transition-Class Coding |
 
-### Full preprint — `paper_full_preprint.pdf` (20 pages)
+### Full preprint — `paper_full_preprint.pdf` (25 pages)
 
-Same main text plus Appendix C: Background Observer-Scale Diagnostics (Figs E1–E4).
+Same main text plus Fig. 8 (task-direction coherence diagnostic) in the Discussion
+and Appendix C: Background Observer-Scale Diagnostics (Figs E1–E4).
 
-### Background lineage figures
+### Background lineage figures (full preprint only)
 
 Earlier observer-scale diagnostics motivated the target-specific framing.
 Generated by the artifact script and kept in `paper/figures/` and `outputs/data/`
@@ -112,7 +117,8 @@ for reproducibility; included in `paper_full_preprint.pdf` only.
 This runs `scripts/make_response_law_artifacts.py` (reads `outputs/`, writes
 `paper/figures/` — 8 flagship + 4 background lineage figures — and `paper/tables/`),
 then compiles both `paper.tex` and `paper_full_preprint.tex`, producing
-`paper/paper.pdf` (17 pages), `paper/paper_full_preprint.pdf` (21 pages),
+`paper/paper.pdf` (21 pages, lean journal version),
+`paper/paper_full_preprint.pdf` (25 pages, with Fig. 8 + background appendix),
 and root copies of both.
 
 No simulations are re-run. All pre-computed outputs are committed to `outputs/`.
@@ -124,9 +130,10 @@ No simulations are re-run. All pre-computed outputs are committed to `outputs/`.
 All scripts are in `scripts/` and should be run from the **repo root**:
 
 ```bash
-source /path/to/venv/bin/activate
+source /path/to/env/bin/activate   # activate your Python environment
 python scripts/ca_selection_principle_test.py
 python scripts/ca_horizon_response_test.py
+python scripts/ca_topology_baseline_controls.py   # ~45 min full run; --quick for smoke test
 # etc.
 ```
 
@@ -145,9 +152,9 @@ pytest test_regression.py -v
 - Selection principle: target-specific incremental lift, both shuffle nulls near zero
 - Temporal response: all 112 slopes negative, bootstrap CIs negative, R² above floor
 - Mechanism ordering (local-window > iso\_count > coarse)
-- Standardized transfer (frac R²-positive = 1.0)
+- Standardised transfer (frac R²-positive = 1.0)
 - Amplitude-calibration LOO R² thresholds
-- LGDS / task-direction coherence
+- LGDS / task-direction coherence (Fig. 8; full preprint only)
 - Prestate non-leakiness across all horizons
 - Artifact generator: no NaN macros, no digit macro names, all figure PDFs present
 - Background lineage figures E1–E4 present and source data non-empty

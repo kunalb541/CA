@@ -11,6 +11,13 @@
 
 \input{macros}
 
+% Topology-baseline values (from scripts/ca_topology_baseline_controls.py)
+\newcommand{\topCompCountR}{0.352}
+\newcommand{\topSmallLeqFourR}{0.330}
+\newcommand{\topSingletonR}{0.274}
+\newcommand{\topIsoEmbeddedR}{0.234}
+\newcommand{\topMooreDegOneR}{0.033}
+
 % Convenience shorthands
 \newcommand{\iso}{{\rm iso}}
 \newcommand{\Ck}{\Delta C_k}
@@ -18,7 +25,7 @@
 
 \begin{document}
 
-\title{Embedded Isolates Predict Fine-Component Loss in Game of Life and HighLife}
+\title{Local Topological Fragility in Game of Life and HighLife}
 
 \author{Kunal Bhatia}
 \affiliation{Independent Researcher, Heidelberg, Germany}
@@ -27,36 +34,46 @@
 \date{\today}
 
 \begin{abstract}
-Life-like cellular automata contain local structures whose predictive
-importance depends on which observable describes the system.
-We identify one such structure: an \emph{embedded isolate}, an alive cell
-with no orthogonal live neighbour and at least one diagonal live neighbour.
+Life-like cellular automata exhibit \emph{local topological fragility}:
+initial configurations with many structurally isolated or weakly-connected
+live cells experience greater future loss of fine-scale connected components.
+We characterise this fragility through a battery of sixteen topology
+statistics---from initial component count to local cell motifs---and identify
+one compact, mechanistically transparent motif within the family:
+the \emph{embedded isolate}, an alive cell with no orthogonal live neighbour
+and at least one diagonal live neighbour.
 Across Conway's Game of Life (GoL) and HighLife, two grid sizes
 ($L\in\{64,128\}$), four initial densities ($\rho\in\{0.20,\ldots,0.35\}$),
-and seven prediction horizons, the initial count of embedded isolates
-predicts future loss of fine-scale connected components
-(mean prestate $R^2 = \prestateIsoMean$; minimum $R^2 = \prestateIsoMin$
-at $k=200$; shuffle $\approx \prestateIsoShuffle$).
+and seven prediction horizons, the $t{=}0$ embedded-isolate count predicts
+future fine-component loss (mean prestate $R^2 = \prestateIsoMean$;
+minimum $R^2 = \prestateIsoMin$ at $k=200$; shuffle $\approx \prestateIsoShuffle$).
 
-The effect is target-specific: iso\_count gives a selective incremental lift
-for fine-component change while both iso-shuffle and target-shuffle
-increments are near zero ($\Delta R^2 < 0.001$), ruling out density
-artefacts.
+The topology-baseline battery reveals a predictive hierarchy: initial
+component count $C(0)$ is the strongest aggregate predictor
+(mean residual $R^2 = \topCompCountR$); singleton components and
+orthogonal-degree-zero cells are the strongest among purely local cell
+statistics ($R^2 = \topSingletonR$); embedded isolates are the most
+mechanistically transparent subclass ($R^2 = \topIsoEmbeddedR$).
+The effect is target-specific: embedded-isolate count gives a selective
+incremental lift for fine-component change while both iso-shuffle and
+target-shuffle increments are near zero ($\Delta R^2 < 0.001$), ruling
+out density artefacts.
 The residual slope $\biso(k)$ is negative in all 112 condition-horizon
 combinations ($k\in\{1,5,10,25,50,100,200\}$, 16 conditions; CV $\lesssim 0.17$).
 
-Mechanistically, embedded isolates with a single diagonal live neighbour
-have exactly one live Moore-neighbour; under the shared $S_{23}$ survival
-rule they die at $t{+}1$ as an exact consequence of the transition table.
+Mechanistically, any alive cell with orthogonal degree 0 and Moore degree
+0 or 1 dies at $t{+}1$ as an exact consequence of the $S_{23}$ survival rule:
+truly isolated cells (Moore degree 0) and single-diagonal embedded isolates
+(Moore degree 1) both lack the 2--3 live neighbours required for survival.
 Multi-diagonal isolates more often survive by merging into a larger component.
-Both pathways reduce the fine-component count, and a local-window loss
-feature captures this with $R^2 = \localwinR$.
-After condition standardisation the mechanism transfers across held-out rule,
-size, and density ($R^2_z = \transferFateAll$), while raw amplitude
-is predictable from grid size and density (LOO $R^2 = \ampLOOsizerho$).
-These results illustrate target-indexed description: embedded isolates are
-privileged specifically for future fine-component change, not for other
-summary statistics of the same automaton state.
+Both pathways reduce the fine-component count; a local-window loss feature
+captures this with $R^2 = \localwinR$.
+After condition standardisation the mechanism transfers across held-out
+conditions ($R^2_z = \transferFateAll$), and raw amplitude is predictable
+from grid size and density (LOO $R^2 = \ampLOOsizerho$).
+These results characterise local topological fragility as a target-indexed
+description: the initial density of weakly-connected live cells is privileged
+specifically for predicting future fine-component change.
 \end{abstract}
 
 \keywords{cellular automata, coarse-graining, embedded isolated cells,
@@ -86,34 +103,42 @@ consistent with computational irreducibility~\cite{israeli2004}:
 we do not claim to predict the full future CA configuration, only one
 low-dimensional target statistic.
 
-We identify one such privileged class: the count of \emph{embedded isolated
-cells} (iso\_count), alive cells with no 4-connected live neighbour and at
-least one diagonally adjacent live neighbour.
-Such cells sit at the topological boundary of 4-connectivity: orthogonally
-isolated, diagonally tethered, they are the most fragile local connectivity
-nodes in the grid.
-When they die or merge, the fine-component count decreases by one.
-The iso\_count statistic measures how many such fragile nodes are present
-at $t=0$ and, as this paper shows, is compact enough to predict the aggregate
-fine-net change at every tested horizon.
+We identify \emph{local topological fragility}---the initial density of
+structurally isolated or weakly-connected live cells---as a target-indexed
+property of Life-like CA states that predicts future fine-component loss.
+A battery of sixteen topology statistics reveals a predictive hierarchy:
+initial component count $C(0)$ is the strongest aggregate predictor;
+small-component and singleton-component (orthogonal-degree-zero) counts
+are the strongest local-structure predictors; and the count of
+\emph{embedded isolated cells} (iso\_count)---alive cells with no
+4-connected live neighbour and at least one diagonally adjacent live
+neighbour---is the most analytically transparent motif within that family.
+Embedded isolates sit at the topological boundary of 4-connectivity:
+orthogonally isolated, diagonally tethered, they are the mechanistically
+cleanest fragile connectivity nodes in the grid, because their one-step
+fate under the $S_{23}$ rule has a simple analytic form.
 Earlier observer-scale diagnostics from the same research program motivated
 this target-specific analysis; they are documented in the public repository.
 
 The main results, established across GoL and HighLife, two grid sizes
 ($L\in\{64,128\}$), four density bands ($\rho\in\{0.20,\ldots,0.35\}$),
 and seven prediction horizons, are:
-(1) iso\_count predicts future fine-component loss with mean prestate
+(1) a topology-baseline battery of 16 statistics shows that local
+fine-topological fragility---led by $C(0)$, small-component counts,
+and singleton/orthogonal-degree-zero counts---strongly predicts fine-net
+change, with embedded isolates as the most analytically transparent motif;
+(2) iso\_count predicts future fine-component loss with mean prestate
 $R^2 = \prestateIsoMean$, sustained above $\prestateIsoMin$ at $k=200$;
-(2) the effect is target-specific---incremental lift for density, entropy,
+(3) the effect is target-specific---incremental lift for density, entropy,
 and coarse-block targets is near zero, as are both shuffle nulls;
-(3) the residual slope $\biso(k)$ is negative in all 112 condition-horizon
+(4) the residual slope $\biso(k)$ is negative in all 112 condition-horizon
 combinations, with CV $\lesssim 0.17$;
-(4) the mechanism is local component-context loss, not simple cell death,
+(5) the mechanism is local component-context loss, not simple cell death,
 and transfers across all leave-one-out axes.
 
 Figure~\ref{fig:object_selection} provides the entry point: the structural
 definition of an embedded isolate and the target-specific $\Delta R^2$
-pattern that singles it out.
+pattern that singles out the fine-component target.
 
 %------------------------------------------------------------
 \section{Definitions and Protocol}
@@ -255,7 +280,7 @@ achieves mean $R^2 = \prestateIsoMean$ across all horizons
 $k \in \{1,\ldots,200\}$ (minimum $R^2 = \prestateIsoMin$;
 shuffle $\approx \prestateIsoShuffle$).
 Adding the full diagonal-class breakdown gives no substantial gain.
-The full multi-horizon response is encoded in the $t=0$ count alone.
+The full multi-horizon iso-count signal is recoverable from the $t{=}0$ count alone.
 
 \begin{figure}[htbp]
   \centering
@@ -268,7 +293,7 @@ The full multi-horizon response is encoded in the $t=0$ count alone.
     (dashed line).
     Adding class-count breakdown (green) gives marginal improvement.
     The grey band shows the shuffle null ($R^2 \approx \prestateIsoShuffle$).
-    All temporal prediction is encoded in the $t=0$ statistic.
+    The tested iso-count signal is recoverable from the $t{=}0$ statistic alone.
   }
   \label{fig:prestate}
 \end{figure}
@@ -337,7 +362,7 @@ There are no outlier conditions or horizons.
 \begin{table}[htbp]
 \centering
 \caption{Temporal response summary (16 conditions, 1000 worlds each;
-bootstrap CIs, 500 draws).  All slopes and slope confidence intervals
+bootstrap CIs, $\geq$300 draws).  All slopes and slope confidence intervals
 are negative at every horizon ($\text{frac\_CI\_neg} = 1.00$).}
 \label{tab:horizon}
 \begin{tabular}{rrrrrr}
@@ -403,22 +428,28 @@ feature, revealing the partial cancellation between loss and gain.
 Class-level analysis (Fig.~\ref{fig:classes}) reveals a consistent
 physical story.
 
-\paragraph{Exact single-diagonal fate.}
-Embedded isolates in classes 1, 2, 4, or 8 (exactly one diagonal live
-neighbour, no orthogonal live neighbours) have exactly one live
-Moore-neighbour at time $t$.
-Both GoL ($S_{23}$) and HighLife ($S_{23}$) require two or three live
-Moore-neighbours for cell survival; therefore the focal cell dies at
-$t{+}1$.
-This is an \emph{exact consequence of the transition table}, not an
-empirical fit.
-Death fractions of $1.0$ for these classes (Fig.~\ref{fig:classes}) are
-analytically guaranteed.
-\emph{Multi-diagonal isolates} (classes with two or more diagonal neighbours)
-depend on the surrounding $5\times 5$ context for births and component
-merging, and their contributions are measured empirically.
+\paragraph{Exact deaths among orthogonal-degree-zero cells.}
+Any alive cell with orthogonal degree 0 has Moore-neighbourhood count
+equal to its diagonal-neighbour count.
+Under $S_{23}$, survival requires 2 or 3 live Moore-neighbours; therefore:
+truly isolated cells (Moore degree 0, no live neighbours at all) die;
+single-diagonal embedded isolates (classes 1, 2, 4, 8; Moore degree 1)
+die; and four-diagonal isolates (class 15; Moore degree 4) also die.
+All three cases are exact consequences of the transition table, independent
+of surrounding context; death fractions of $1.0$ for these classes
+(Fig.~\ref{fig:classes}) are analytically guaranteed.
+Two- and three-diagonal isolates (Moore degrees 2 and 3) survive under
+$S_{23}$ and depend on the surrounding $5\times 5$ context for component
+merging.
+This analytic structure directly explains why the orthogonal-degree-zero
+superset outperforms the embedded-isolate subset in raw predictive $R^2$
+(Table~\ref{tab:topology_baselines}): it combines both dying subclasses
+(Moore degree 0 and 1) under a single count.
+Embedded isolates remain the mechanistically preferred motif because the
+diagonal-tethering condition gives them a concrete component-context
+interpretation absent from truly isolated floating cells.
 
-More often they survive-connected: they merge with a larger component
+Two- and three-diagonal embedded isolates more often survive-connected: they merge with a larger component
 and reduce the fine component count by absorbing an independent component.
 Both pathways lead to the same aggregate outcome---local fine-connectivity
 loss---which is why the local-window loss feature ($R^2 = \localwinR$)
@@ -474,7 +505,7 @@ all\_fates (combined)      & $\allfatesR$ & mixed \\
 \end{table}
 
 %------------------------------------------------------------
-\section{Robustness: Transfer, Amplitude, and Nulls}
+\section{Robustness: Transfer, Amplitude, and Local Baselines}
 \label{sec:transfer}
 %------------------------------------------------------------
 
@@ -548,52 +579,85 @@ standardised direction.
   \label{fig:transfer_amplitude}
 \end{figure}
 
+\subsection{Local Topology Baselines}
+\label{sec:baselines}
+
+Because the target is a change in 4-connected component count, embedded
+isolates might be merely one member of a broader family of local topological
+fragility statistics, each predicting $\Ck$ for similar reasons.
+We test this directly by running the same density-residualised protocol
+(Appendix~\ref{app:residual}) on fifteen alternative $t{=}0$ statistics:
+initial component count $C(0)$, small-component counts (sizes $\leq 4$,
+$=2,3,4$), singleton components (algebraically identical to orthogonal-degree-zero cells), truly isolated cells (Moore degree 0), Moore-degree counts
+($d=1,2$), boundary cells (alive with $\geq 1$ orthogonally dead neighbour),
+and coarse block statistics.
+Table~\ref{tab:topology_baselines} shows global mean residual $R^2$ per
+predictor, averaged over all 112 condition-horizon cells.
+
+The result is structurally informative and transparent.
+$C(0)$ is the strongest predictor ($R^2 = \topCompCountR$): more components
+at $t{=}0$ means more components ``at risk'' of loss.
+Small components of size $\leq 4$ are next ($R^2 = \topSmallLeqFourR$),
+followed by singleton components / orthogonal-degree-zero cells
+($R^2 = \topSingletonR$).
+Embedded isolates rank fourth ($R^2 = \topIsoEmbeddedR$), behind
+the orthogonal-degree-zero superset from which they are drawn.
+All block-level and Moore-degree-only statistics are substantially weaker.
+
+Embedded isolates are therefore not claimed to be the unique or globally
+optimal predictor.
+They are a compact, diagonal-tethered subclass of the orthogonal-degree-zero
+family, singled out because their one-step fate has a clean analytic form
+under $S_{23}$ and because the diagonal-tethering condition provides
+a concrete component-context interpretation: a cell touching live structure
+diagonally but not orthogonally is a fragile link whose death or merger
+directly removes a fine-connectivity node.
+The broader local-fragility family---from $C(0)$ to small-component counts
+to singleton cells to embedded isolates---forms a coherent predictive
+structure that this paper characterises and places on a mechanistic footing.
+
+\begin{table}[htbp]
+\centering
+\caption{Local topology baseline: mean residual $R^2$ per predictor,
+averaged over all 112 condition-horizon cells
+(2 rules $\times$ 2 sizes $\times$ 4 densities $\times$ 7 horizons;
+1000 worlds per condition).
+All predictors measured at $t{=}0$; live-count $+$ density baseline
+residualised before fitting.
+Singleton components $\equiv$ orthogonal-degree-zero cells by definition.}
+\label{tab:topology_baselines}
+\begin{tabular}{lr}
+\toprule
+Predictor & Mean resid.\ $R^2$ \\
+\midrule
+$C(0)$ (initial component count)   & $\topCompCountR$ \\
+Small components ($\leq 4$ cells)   & $\topSmallLeqFourR$ \\
+Singleton / orth-degree-zero cells  & $\topSingletonR$ \\
+\textbf{Embedded isolates (iso\_count)} & $\mathbf{\topIsoEmbeddedR}$ \\
+Moore-degree-one cells              & $\topMooreDegOneR$ \\
+Block variance / entropy            & ${\approx}0.006$--$0.009$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 %------------------------------------------------------------
 \section{Discussion}
 \label{sec:discussion}
 %------------------------------------------------------------
 
 \textit{Summary.}
-iso\_count is a non-leaky, target-specific predictor of fine-net component
-change (mean prestate $R^2 = \prestateIsoMean$; shuffle $\approx \prestateIsoShuffle$;
-both shuffle incremental nulls near zero).
-$\biso(k)$ is negative across all 112 condition-horizon combinations,
-both rules, both grid sizes, and all four density levels.
-The one-step mechanism is local component-context loss ($R^2 = \localwinR$),
-not simple cell death; single-diagonal isolates die exactly by the $S_{23}$
-rule, while multi-diagonal isolates often survive-connected.
-The standardised direction transfers across all leave-one-out axes and
-raw amplitude is calibrated by $(L,\rho)$ with LOO $R^2 = \ampLOOsizerho$
-(two-predictor model; $\ampLOOfull$ in the full six-predictor model).
-
-\textit{Common-direction diagnostic.}
-A descriptive check on why a single statistic serves all fine-net horizons
-is to measure alignment of regression-coefficient vectors in feature space.
-For each task we fit a residual model and normalise the coefficient vector;
-pairwise absolute cosines $|\cos\theta_{ij}|$ measure task alignment.
-Fine-net horizon tasks are near-collinear
-($|\cos| = \horizonCos$, rank-1 energy $= \horizonRankone$):
-a single feature direction aligns all $k$-step predictions simultaneously.
-Heterogeneous targets are not ($|\cos| = \selCos$),
-and no single predictor adds meaningful $\Delta R^2$ for all of them.
-Figure~\ref{fig:coherence} shows this contrast.
-This collinearity is a descriptive geometric property of the regression
-directions, not a claim about any specific theory of causal emergence or
-effective coarse-graining.
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.70\columnwidth]{fig8_coherence}
-  \caption{
-    \textbf{Task-direction coherence.}
-    Mean pairwise $|\cos\theta|$ (solid) and rank-1 energy (hatched)
-    for fine-net horizon tasks (blue) and heterogeneous targets (orange).
-    Fine-net horizons are near-collinear
-    ($|\cos| = \horizonCos$, rank-1 $= \horizonRankone$);
-    heterogeneous targets are dispersed ($|\cos| = \selCos$).
-  }
-  \label{fig:coherence}
-\end{figure}
+Local topological fragility---the initial density of weakly-connected live
+cells---predicts future fine-component loss in GoL and HighLife.
+The topology-baseline battery (Table~\ref{tab:topology_baselines}) places
+this on a tested footing: the predictive hierarchy from $C(0)$ through
+small-component counts and singleton/orthogonal-degree-zero cells to
+embedded isolates ($R^2 = \topIsoEmbeddedR$) forms a coherent fragility
+family, with embedded isolates as the mechanistically transparent motif.
+The target-specific prestate signal ($R^2 = \prestateIsoMean$; both shuffle
+nulls near zero) arises from a local mechanism---orthogonal-degree-zero cells
+with Moore degree 0 or 1 die exactly under $S_{23}$---that standardises
+and transfers across all leave-one-out axes, with raw amplitude calibrated
+from $(L,\rho)$ (LOO $R^2 = \ampLOOsizerho$).
 
 \textit{The two-layer structure.}
 The decomposition $\biso(\text{cond}) \approx A(L,\rho)\,\biso,z$ cleanly
@@ -629,36 +693,48 @@ results~\cite{israeli2004}: we predict one low-dimensional target statistic
 The partial predictability shown here is consistent with computational
 irreducibility; it concerns a specific chosen observable, not global
 state reconstruction.
-The novelty lies in combining four elements simultaneously: a single
-interpretable hand-defined structural object that (i) gives target-specific
-prediction with exact one-step fate for the single-diagonal subclass,
-(ii) decomposes into an analytically grounded mechanism,
-(iii) transfers across held-out conditions after standardisation, and
-(iv) admits amplitude calibration from $(L,\rho)$---all for future
-fine-component loss in two well-studied Life-like rules.
+The novelty lies in combining four elements simultaneously: a coherent
+local-fragility family that (i) is characterised by a baseline battery
+rather than a single hand-picked object, (ii) has a mechanistically
+transparent motif (embedded isolates) with exact one-step fate for the
+single-diagonal subclass, (iii) produces a standardised mechanism that
+transfers across held-out conditions, and (iv) admits amplitude calibration
+from $(L,\rho)$---all for future fine-component loss in two well-studied
+Life-like rules.
 
-\textit{Embedded isolates as objects.}
-Embedded isolated cells form a well-defined structural class at the topological
-boundary of connectivity.
-Their prevalence determines how much the fine-component count is
-``at risk'' at the next step.
-The stability of $\biso(k)$ across horizons suggests that the risk
-resolves primarily at $t=1$ and that subsequent dynamics do not erase
-the initial predictive information---consistent with the prestate
-non-leakiness result.
-iso\_count is thus a \emph{topological risk indicator} for fine-net change,
-not a simple density proxy.
+\textit{Local topological fragility as an observer class.}
+The topology-baseline battery shows that what matters for predicting
+fine-component change is the initial density of locally disconnected or
+weakly-connected live cells---a property we call local topological fragility.
+$C(0)$, small-component counts, and orthogonal-degree-zero cells all
+capture this property in different ways and form a coherent predictive
+family.
+Embedded isolates are the analytically cleanest member of that family:
+their diagonal tethering gives them a component-context interpretation
+(they are nodes at risk of losing their local connectivity), and their
+one-step fate is partially analytic rather than purely empirical.
+The stability of $\biso(k)$ across horizons suggests that the risk resolves
+primarily at $t=1$ and that subsequent dynamics do not erase the initial
+predictive information---consistent with the prestate non-leakiness result.
+iso\_count is therefore a \emph{topological risk indicator} within the
+broader local-fragility family, not a simple density proxy and not claimed
+to be the uniquely optimal fragility statistic.
 
 %------------------------------------------------------------
 \section{Conclusion}
 \label{sec:conclusion}
 %------------------------------------------------------------
 
-The count of embedded isolated cells is a compact, non-leaky prestate
-predictor of future fine-component change in Conway's Game of Life
-and HighLife.
-The $t=0$ count alone explains a substantial fraction of residual
-fine-component change across all tested horizons
+Future fine-component change in Conway's Game of Life and HighLife is
+controlled by local topological fragility: the initial density of
+weakly-connected live cells.
+A topology-baseline battery of sixteen statistics identifies a predictive
+hierarchy from the initial component count $C(0)$ ($R^2 = \topCompCountR$)
+through small-component and singleton/orth-degree-zero counts
+($R^2 = \topSmallLeqFourR$, $\topSingletonR$) to embedded isolates
+($R^2 = \topIsoEmbeddedR$), the most analytically transparent motif.
+The $t=0$ embedded-isolate count alone explains a substantial fraction of
+residual fine-component change across all tested horizons
 (mean prestate $R^2 = \prestateIsoMean$; minimum $R^2 = \prestateIsoMin$
 at $k=200$; shuffle $\approx \prestateIsoShuffle$).
 The residual slope $\biso(k)$ is negative in all 112 condition-horizon
@@ -668,15 +744,13 @@ an empirical regularity that holds without exception across the scoped battery.
 Both iso-shuffle and target-shuffle incremental nulls are near zero
 ($\Delta R^2 < 0.001$), ruling out density artefacts.
 The one-step mechanism is local component-context loss, not simple cell
-death: single-diagonal isolates die exactly under the shared $S_{23}$
-rule; multi-diagonal isolates often survive-connected.
+death: any orthogonal-degree-zero cell with Moore degree 0 or 1 dies exactly
+under the shared $S_{23}$ rule; two- and three-diagonal isolates often
+survive-connected.
 This standardised mechanism transfers across all leave-one-out axes
 and the raw amplitude is predictable from $(L,\rho)$
 (LOO $R^2 = \ampLOOsizerho$, rising to $\ampLOOfull$ in the full
 six-predictor model).
-The collinearity of fine-net regression directions ($|\cos| = \horizonCos$)
-provides a compact geometric diagnostic of why one prestate statistic
-serves all tested horizons simultaneously.
 
 %------------------------------------------------------------
 \begin{acknowledgments}
@@ -691,7 +765,10 @@ All code, simulation outputs, and figure sources are available at
 \url{https://github.com/kunalb541/CA}.
 The repository includes an automated regression suite (93 tests) covering
 the selection, horizon-response, mechanism, transfer, amplitude-calibration,
-and artifact-generation pipelines; all tests pass for the submitted build.
+and artifact-generation pipelines, plus a standalone topology-baseline
+controls script (\path{ca_topology_baseline_controls.py}) whose
+outputs are archived in \path{outputs/topology_baselines/};
+all regression tests pass for the submitted build.
 
 %------------------------------------------------------------
 \appendix

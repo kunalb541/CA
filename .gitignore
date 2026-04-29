@@ -35,6 +35,7 @@ venv/
 
 # Project-specific: keep PDF outputs but not per-run logs
 outputs/logs/
+outputs/topology_baselines/run.log
 # Large raw simulation files (>100 MB — exceeds GitHub's file size limit)
 outputs/isolate_transition_classes/transition_isolate_raw.csv
 
