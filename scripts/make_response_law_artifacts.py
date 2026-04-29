@@ -135,10 +135,12 @@ def make_fig1(ROOT):
     labels = [label_map.get(t, t) for t in gp["target"]]
 
     # ====== build two-row figure ======
-    fig = plt.figure(figsize=(6.5, 5.8))
-    gs_top = gridspec.GridSpec(1, 1, top=0.97, bottom=0.56,
+    # Extra height (6.1 → 6.4) and larger bottom margin give room for
+    # the rotated x-tick labels in the bar panel.
+    fig = plt.figure(figsize=(6.5, 6.4))
+    gs_top = gridspec.GridSpec(1, 1, top=0.97, bottom=0.57,
                                left=0.04, right=0.96)
-    gs_bot = gridspec.GridSpec(1, 1, top=0.50, bottom=0.07,
+    gs_bot = gridspec.GridSpec(1, 1, top=0.50, bottom=0.14,
                                left=0.14, right=0.97)
 
     # ============================================================
@@ -235,7 +237,8 @@ def make_fig1(ROOT):
              color="white", edgecolor=BLACK, linewidth=0.7, zorder=2)
     ax_b.axhline(0, color=BLACK, linewidth=0.5)
     ax_b.set_xticks(x)
-    ax_b.set_xticklabels(labels, fontsize=8.5)
+    ax_b.set_xticklabels(labels, fontsize=8.5, rotation=18,
+                         ha="right", rotation_mode="anchor")
     ax_b.set_ylabel("$\\Delta R^2$ vs density control", fontsize=9)
     ax_b.set_title("(b)  Target-specific $\\Delta R^2$ — iso\\_count lifts fine-net only (global pooled)",
                    loc="left", fontsize=10, pad=4)
