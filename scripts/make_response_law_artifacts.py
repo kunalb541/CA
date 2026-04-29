@@ -66,110 +66,190 @@ def _savefig(fig, name):
 
 
 # ---------------------------------------------------------------------------
-# Figure 1 — Object channel and target specificity
+# Figure 1 — Object definition (top) + target specificity (bottom)
+# Two-row layout: polished 5×5 schematic on top, clean bars on bottom.
 # ---------------------------------------------------------------------------
 def make_fig1(ROOT):
     _apply_style()
 
     sel = pd.read_csv(ROOT / "outputs/selection_principle/selection_summary.csv")
 
-    # ---------- panel (a): embedded-isolate schematic ----------
-    LIVE_FOCAL = "black"
-    LIVE_DIAG  = "#555555"
-    DEAD       = "white"
-    EDGE       = "#444444"
+    # =========================================================
+    # 5×5 schematic colour scheme
+    # =========================================================
+    C_FOCAL   = BLUE         # the embedded isolate (centre)
+    C_ORTH    = "#F5F5F5"    # 4-connected dead neighbours (very light)
+    C_DIAG_A  = "#444444"    # diagonal alive neighbours
+    C_DIAG_D  = "#E0E0E0"    # diagonal dead neighbours
+    C_BG      = "#D4E8F7"    # outer-ring background (light blue)
+    C_EDGE    = "#666666"
 
-    cell_state = {
-        (0,0): LIVE_DIAG, (0,1): DEAD, (0,2): LIVE_DIAG,
-        (1,0): DEAD,      (1,1): LIVE_FOCAL, (1,2): DEAD,
-        (2,0): DEAD,      (2,1): DEAD, (2,2): DEAD,
-    }
+    # 5×5 state map  (row, col) → colour
+    # Centre = (2,2) = embedded isolate
+    # Orthogonal dead: (1,2), (3,2), (2,1), (2,3)
+    # Diagonal alive: (1,1), (3,1), (1,3)   ← at least 1 required
+    # Diagonal dead: (3,3)
+    # Outer ring (row 0, row 4, col 0, col 4): background context
+    states = {}
+    for r in range(5):
+        for c in range(5):
+            if r in (0, 4) or c in (0, 4):
+                states[(r, c)] = C_BG
+            else:
+                states[(r, c)] = C_BG  # default inner, overridden below
+    states[(2, 2)] = C_FOCAL
+    states[(1, 2)] = C_ORTH
+    states[(3, 2)] = C_ORTH
+    states[(2, 1)] = C_ORTH
+    states[(2, 3)] = C_ORTH
+    states[(1, 1)] = C_DIAG_A
+    states[(3, 1)] = C_DIAG_A
+    states[(1, 3)] = C_DIAG_A
+    states[(3, 3)] = C_DIAG_D
+    # Outer ring: light pattern for context
+    for r, c in [(0,2),(2,0),(4,2),(2,4),(0,0),(0,4),(4,0),(4,4)]:
+        states[(r, c)] = "#BBBBBB"
+    for r, c in [(0,1),(0,3),(1,0),(3,0),(1,4),(3,4),(4,1),(4,3)]:
+        states[(r, c)] = "#CCCCCC"
 
-    # ---------- panel (b): target-specificity ΔR² bars ----------
+    # ---------- target-specificity bar data ----------
     gp = sel[sel["scope"] == "global_pooled"].copy()
-    label_map = {
-        "target_fine_net":        "fine-net\n$\\Delta C_k$",
-        "target_delta_density":   "density\n$\\Delta\\rho$",
-        "target_delta_block_var": "block\nvariance",
-        "target_future_density":  "future\ndensity",
-        "target_delta_block_entropy": "block\nentropy",
-        "target_future_live_count":"live\ncount",
-        "target_delta_components": "comps\n$\\Delta C_1$",
-    }
+    # Drop duplicated delta_components (numerically == fine_net) for clarity
     target_order = [
         "target_fine_net",
-        "target_delta_components",
-        "target_delta_density",
-        "target_delta_block_var",
         "target_delta_block_entropy",
+        "target_delta_block_var",
+        "target_delta_density",
         "target_future_density",
         "target_future_live_count",
     ]
+    label_map = {
+        "target_fine_net":            "fine-net $\\Delta C_k$",
+        "target_delta_block_entropy":  "block entropy",
+        "target_delta_block_var":      "block variance",
+        "target_delta_density":        "$\\Delta$ density",
+        "target_future_density":       "future density",
+        "target_future_live_count":    "live count",
+    }
     gp = gp.set_index("target").reindex(target_order).reset_index()
     labels = [label_map.get(t, t) for t in gp["target"]]
 
-    # ====== build figure ======
-    fig = plt.figure(figsize=(6.5, 3.5))
-    gs  = gridspec.GridSpec(1, 2, figure=fig, wspace=0.38,
-                            left=0.06, right=0.98, top=0.92, bottom=0.14)
+    # ====== build two-row figure ======
+    fig = plt.figure(figsize=(6.5, 5.8))
+    gs_top = gridspec.GridSpec(1, 1, top=0.97, bottom=0.56,
+                               left=0.04, right=0.96)
+    gs_bot = gridspec.GridSpec(1, 1, top=0.50, bottom=0.07,
+                               left=0.14, right=0.97)
 
-    # ----- (a) schematic -----
-    ax_s = fig.add_subplot(gs[0, 0])
-    ax_s.set_xlim(-0.15, 3.30)
-    ax_s.set_ylim(-0.45, 3.15)
+    # ============================================================
+    # TOP ROW: polished 5×5 schematic
+    # ============================================================
+    ax_s = fig.add_subplot(gs_top[0, 0])
+    sz   = 0.78
+    gap  = 0.07
+    W    = 5 * (sz + gap)   # total grid width
+
+    ax_s.set_xlim(-0.4, W + 2.4)
+    ax_s.set_ylim(-0.5, W + 0.3)
     ax_s.set_aspect("equal")
     ax_s.axis("off")
-    sz = 0.90
-    gap = 0.06
-    for (r, c), col in cell_state.items():
-        x0 = c * (sz + gap)
-        y0 = (2 - r) * (sz + gap)
-        rect = Rectangle((x0, y0), sz, sz,
-                          facecolor=col, edgecolor=EDGE, linewidth=0.9, zorder=2)
-        ax_s.add_patch(rect)
-        if col == DEAD and (r == 1 or c == 1):
-            ax_s.text(x0 + sz/2, y0 + sz/2, "×",
-                      ha="center", va="center", fontsize=11, color="#888888", zorder=3)
-        if col == LIVE_FOCAL:
-            ax_s.text(x0 + sz/2, y0 + sz/2, "●",
-                      ha="center", va="center", fontsize=16, color="white", zorder=3)
-        if col == LIVE_DIAG:
-            ax_s.text(x0 + sz/2, y0 + sz/2, "●",
-                      ha="center", va="center", fontsize=12, color="white", zorder=3)
-    ax_s.text(1.5 * (sz + gap) - sz/2, -0.35,
-              "4-connected neighbours dead", ha="center", va="top", fontsize=7.5,
-              color="#555555")
-    ax_s.text(3.15 * (sz + gap) - sz/2, 2.9 * (sz + gap) - sz/2,
-              "diag.\nnbr", ha="left", va="top", fontsize=7, color="#444444",
-              bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="#aaa", lw=0.5))
-    ax_s.set_title("(a)  Embedded isolate", loc="left", fontsize=10, pad=4)
 
-    # ----- (b) ΔR² bars -----
-    ax_b = fig.add_subplot(gs[0, 1])
+    for (r, c), col in states.items():
+        x0 = c * (sz + gap)
+        y0 = (4 - r) * (sz + gap)      # flip so row-0 is at top
+        lw = 1.2 if (r, c) == (2, 2) else 0.7
+        ec = BLUE if (r, c) == (2, 2) else C_EDGE
+        rect = Rectangle((x0, y0), sz, sz,
+                          facecolor=col, edgecolor=ec,
+                          linewidth=lw, zorder=2)
+        ax_s.add_patch(rect)
+        cx, cy = x0 + sz/2, y0 + sz/2
+        if (r, c) == (2, 2):
+            ax_s.text(cx, cy, "●", ha="center", va="center",
+                      fontsize=17, color="white", zorder=4)
+            ax_s.text(cx, cy - 0.53, "isolate", ha="center", va="top",
+                      fontsize=7, color="white", zorder=4, style="italic")
+        elif col == C_ORTH:
+            ax_s.text(cx, cy, "×", ha="center", va="center",
+                      fontsize=13, color="#999999", zorder=3)
+        elif col == C_DIAG_A:
+            ax_s.text(cx, cy, "●", ha="center", va="center",
+                      fontsize=13, color="white", zorder=3)
+        elif col in (C_DIAG_D, "#BBBBBB", "#CCCCCC"):
+            pass   # empty background
+
+    # Annotation: orthogonal neighbours bracket (left side)
+    orth_xs  = [2*(sz+gap), 2*(sz+gap), 2*(sz+gap), 2*(sz+gap)]  # col=2
+    orth_ys  = [(4-1)*(sz+gap)+sz/2, (4-3)*(sz+gap)+sz/2,
+                (4-2)*(sz+gap)+sz,   (4-2)*(sz+gap)]
+    # draw brace on left
+    brace_x = -0.25
+    for yr in [orth_ys[0], orth_ys[1],
+               2*(sz+gap) + sz,   # north orthogonal top
+               2*(sz+gap)]:       # south orthogonal bottom
+        pass
+    # Simple annotation: text labels
+    ax_s.text(-0.32, (4-2)*(sz+gap) + sz/2,
+              "4-connected\nneighbours\ndead",
+              ha="right", va="center", fontsize=8, color="#B03030",
+              bbox=dict(boxstyle="round,pad=0.25", fc="#FFF0F0", ec="#D08080", lw=0.8))
+    # Arrow from annotation to N cell
+    n_cx = 2*(sz+gap) + sz/2
+    n_cy = (4-1)*(sz+gap) + sz/2
+    ax_s.annotate("", xy=(n_cx - sz/2 - 0.04, n_cy),
+                  xytext=(-0.10, n_cy),
+                  arrowprops=dict(arrowstyle="-|>", color="#B03030",
+                                  lw=0.8, mutation_scale=10))
+
+    # Annotation: diagonal alive neighbours
+    d_cx = 1*(sz+gap) + sz/2   # NW diagonal (1,1)
+    d_cy = (4-1)*(sz+gap) + sz/2
+    ax_s.text(W + 0.3, (4-1)*(sz+gap) + sz/2,
+              "diagonal\nneighbours\n$\\geq 1$ alive",
+              ha="left", va="center", fontsize=8, color="#1A5E1A",
+              bbox=dict(boxstyle="round,pad=0.25", fc="#F0FFF0", ec="#80B080", lw=0.8))
+    ax_s.annotate("", xy=(3*(sz+gap), (4-1)*(sz+gap) + sz/2),
+                  xytext=(W + 0.25, (4-1)*(sz+gap) + sz/2),
+                  arrowprops=dict(arrowstyle="-|>", color="#1A5E1A",
+                                  lw=0.8, mutation_scale=10))
+
+    ax_s.set_title("(a)  Embedded isolate — structural definition",
+                   loc="left", fontsize=10, pad=4)
+
+    # ============================================================
+    # BOTTOM ROW: target-specificity bars
+    # ============================================================
+    ax_b = fig.add_subplot(gs_bot[0, 0])
     x   = np.arange(len(labels))
-    w   = 0.20
+    w   = 0.19
     iso_vals  = gp["deltaR2_iso"].values
     crs_vals  = gp["deltaR2_coarse"].values
     ent_vals  = gp["deltaR2_entropy"].values
     nul_vals  = gp["deltaR2_null_iso_shuffle"].values
 
-    ax_b.bar(x - 1.5*w, iso_vals,  w, label="iso",     color=BLUE,   zorder=2)
-    ax_b.bar(x - 0.5*w, crs_vals,  w, label="coarse",  color=GRAY,   zorder=2)
-    ax_b.bar(x + 0.5*w, ent_vals,  w, label="entropy", color=ORANGE, alpha=0.7, zorder=2)
-    ax_b.bar(x + 1.5*w, nul_vals,  w, label="null",    color="white",
-             edgecolor=BLACK, linewidth=0.7, zorder=2)
+    ax_b.bar(x - 1.5*w, iso_vals,  w, label="iso\_count",  color=BLUE,   zorder=2)
+    ax_b.bar(x - 0.5*w, crs_vals,  w, label="coarse",      color=GRAY,   zorder=2)
+    ax_b.bar(x + 0.5*w, ent_vals,  w, label="entropy",     color=ORANGE, alpha=0.7, zorder=2)
+    ax_b.bar(x + 1.5*w, nul_vals,  w, label="null (shuffle)",
+             color="white", edgecolor=BLACK, linewidth=0.7, zorder=2)
     ax_b.axhline(0, color=BLACK, linewidth=0.5)
     ax_b.set_xticks(x)
-    ax_b.set_xticklabels(labels, fontsize=7, rotation=0)
-    ax_b.set_ylabel("$\\Delta R^2$ vs density control")
-    ax_b.set_title("(b)  Target specificity (global pooled)", loc="left", fontsize=10, pad=4)
-    ax_b.legend(loc="upper right", fontsize=7, ncol=2)
-    # Annotate fine-net iso bar
-    ax_b.annotate("iso only\nsignificant\nfor fine-net",
+    ax_b.set_xticklabels(labels, fontsize=8.5)
+    ax_b.set_ylabel("$\\Delta R^2$ vs density control", fontsize=9)
+    ax_b.set_title("(b)  Target specificity — iso\_count signals only for fine-net (global pooled)",
+                   loc="left", fontsize=10, pad=4)
+    ax_b.legend(loc="upper right", fontsize=7.5, ncol=2)
+
+    # Annotate the fine-net iso bar with value
+    ax_b.annotate(f"$\\Delta R^2={iso_vals[0]:.4f}$",
                   xy=(x[0] - 1.5*w, iso_vals[0]),
-                  xytext=(x[0] + 0.9, iso_vals[0] + 0.0003),
-                  arrowprops=dict(arrowstyle="->", color="black", lw=0.7),
-                  fontsize=6.5, va="center", ha="left")
+                  xytext=(x[0] + 0.5, iso_vals[0] + 0.0002),
+                  arrowprops=dict(arrowstyle="->", color=BLUE, lw=0.8),
+                  fontsize=7.5, va="bottom", ha="left", color=BLUE)
+    # Annotate null near zero
+    ax_b.text(x[0] + 1.5*w, 0.00005,
+              "null $\\approx 0$", ha="center", va="bottom",
+              fontsize=6.5, color="#888888", style="italic")
 
     _savefig(fig, "fig1_object_selection.pdf")
     _savefig(fig, "fig1_object_selection.png")
